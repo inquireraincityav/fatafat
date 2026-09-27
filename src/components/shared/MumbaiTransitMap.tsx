@@ -209,8 +209,8 @@ export default function MumbaiTransitMap({
         if (!coords) return;
         L.polyline(coords, {
           color: LINE_COLORS[line],
-          weight: 4,
-          opacity: 0.85,
+          weight: 3,
+          opacity: 0.9,
         }).addTo(map);
       });
 
@@ -223,22 +223,22 @@ export default function MumbaiTransitMap({
 
       stationsToShow.forEach((station) => {
         const marker = L.circleMarker([station.lat, station.lng], {
-          radius: zoom >= 13 ? 5 : 3.5,
+          radius: zoom >= 13 ? 4 : 3,
           fillColor: LINE_COLORS[station.line],
           color: dark ? "#1f2937" : "#ffffff",
-          weight: 2,
+          weight: 1.5,
           fillOpacity: 1,
         }).addTo(map);
 
         marker.bindTooltip(station.name, {
           permanent: zoom >= 14,
           direction: "right",
-          offset: [8, 0],
+          offset: [6, 0],
           className: `transit-tooltip ${dark ? "dark" : "light"}`,
         });
       });
 
-      if (zoom >= 12) {
+      if (zoom >= 13) {
         areaLabels.forEach((area) => {
           const icon = L.divIcon({
             html: `<span class="area-label ${dark ? "dark" : "light"}">${area.name}</span>`,
@@ -276,8 +276,9 @@ export default function MumbaiTransitMap({
         attributionControl: false,
       });
 
-      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
         maxZoom: 19,
+        subdomains: "abcd",
       }).addTo(map);
 
       if (dark && mapRef.current) {
