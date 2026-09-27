@@ -18,6 +18,16 @@ const fraunces = Fraunces({
 export const metadata: Metadata = {
   title: "Fatafat — Mumbai Transit Companion",
   description: "Western · Central · Harbour · BEST",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Fatafat",
+  },
+  icons: {
+    icon: "/icons/icon-192.png",
+    apple: "/icons/icon-512.png",
+  },
 };
 
 export const viewport: Viewport = {
