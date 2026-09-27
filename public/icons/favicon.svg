@@ -1,11 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
   <rect width="512" height="512" rx="108" fill="#1F3A5F"/>
-  <g transform="translate(106,106) scale(1.5)">
-    <rect x="42" y="34" width="116" height="140" rx="58" fill="#E8A63C"/>
-    <rect x="64" y="58" width="72" height="38" rx="18" fill="#1F3A5F"/>
-    <circle cx="76" cy="150" r="11" fill="#1F3A5F"/>
-    <circle cx="124" cy="150" r="11" fill="#1F3A5F"/>
-    <rect x="168" y="84" width="26" height="9" rx="4.5" fill="#E8A63C" opacity="0.55"/>
-    <rect x="172" y="107" width="22" height="9" rx="4.5" fill="#E8A63C" opacity="0.35"/>
-  </g>
+  <!-- Train body -->
+  <rect x="115" y="140" width="282" height="192" rx="64" fill="#E8A63C"/>
+  <!-- Windows -->
+  <rect x="147" y="178" width="77" height="64" rx="19" fill="#1F3A5F"/>
+  <rect x="243" y="178" width="77" height="64" rx="19" fill="#1F3A5F"/>
+  <!-- Front light -->
+  <rect x="346" y="210" width="26" height="26" rx="13" fill="#FBF7EF" opacity="0.8"/>
+  <!-- Wheels -->
+  <circle cx="179" cy="358" r="26" fill="#E8A63C"/>
+  <circle cx="333" cy="358" r="26" fill="#E8A63C"/>
+  <circle cx="179" cy="358" r="10" fill="#1F3A5F"/>
+  <circle cx="333" cy="358" r="10" fill="#1F3A5F"/>
+  <!-- Track -->
+  <line x1="77" y1="384" x2="435" y2="384" stroke="#E8A63C" stroke-width="10" opacity="0.4"/>
+  <!-- Speed lines -->
+  <line x1="64" y1="192" x2="102" y2="192" stroke="#FBF7EF" stroke-width="6" opacity="0.3" stroke-linecap="round"/>
+  <line x1="51" y1="230" x2="96" y2="230" stroke="#FBF7EF" stroke-width="6" opacity="0.2" stroke-linecap="round"/>
+  <line x1="64" y1="269" x2="102" y2="269" stroke="#FBF7EF" stroke-width="6" opacity="0.3" stroke-linecap="round"/>
 </svg>
