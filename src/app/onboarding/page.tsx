@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-function MumbaiSkylineIcon() {
+function MumbaiSkylineSVG() {
   return (
     <svg
       width="80"
@@ -12,64 +12,51 @@ function MumbaiSkylineIcon() {
       xmlns="http://www.w3.org/2000/svg"
     >
       <rect width="80" height="80" rx="20" fill="rgba(232,166,60,0.12)" />
-      {/* Skyline silhouette */}
-      <g opacity="0.3">
-        {/* Buildings */}
-        <rect x="12" y="38" width="6" height="18" rx="1" fill="#E8A63C" />
-        <rect x="20" y="32" width="5" height="24" rx="1" fill="#E8A63C" />
-        <rect x="27" y="36" width="7" height="20" rx="1" fill="#E8A63C" />
-        <rect x="46" y="30" width="5" height="26" rx="1" fill="#E8A63C" />
-        <rect x="53" y="34" width="6" height="22" rx="1" fill="#E8A63C" />
-        <rect x="61" y="38" width="7" height="18" rx="1" fill="#E8A63C" />
-        {/* Sea Link cable tower */}
-        <rect x="37" y="24" width="3" height="32" rx="1" fill="#E8A63C" />
-        <path
-          d="M28 42 Q38.5 30 49 42"
-          stroke="#E8A63C"
-          strokeWidth="1.2"
-          fill="none"
-        />
-        <path
-          d="M30 46 Q38.5 36 47 46"
-          stroke="#E8A63C"
-          strokeWidth="0.8"
-          fill="none"
-        />
+      {/* Gateway of India */}
+      <g opacity="0.85">
+        <rect x="30" y="34" width="20" height="26" rx="1" fill="none" stroke="#E8A63C" strokeWidth="1.2" />
+        <path d="M33 34 Q40 24 47 34" fill="none" stroke="#E8A63C" strokeWidth="1.2" />
+        <rect x="36" y="44" width="8" height="16" rx="3" fill="none" stroke="#E8A63C" strokeWidth="1" />
+        <rect x="31" y="38" width="4" height="6" rx="1.5" fill="none" stroke="#E8A63C" strokeWidth="0.8" />
+        <rect x="45" y="38" width="4" height="6" rx="1.5" fill="none" stroke="#E8A63C" strokeWidth="0.8" />
+        {/* Dome */}
+        <circle cx="40" cy="28" r="3" fill="none" stroke="#E8A63C" strokeWidth="0.8" />
       </g>
+      {/* Skyscrapers */}
+      <g opacity="0.35">
+        <rect x="10" y="40" width="5" height="20" rx="0.5" fill="#E8A63C" />
+        <rect x="16" y="34" width="4" height="26" rx="0.5" fill="#E8A63C" />
+        <rect x="56" y="36" width="5" height="24" rx="0.5" fill="#E8A63C" />
+        <rect x="62" y="30" width="4" height="30" rx="0.5" fill="#E8A63C" />
+        <rect x="67" y="38" width="5" height="22" rx="0.5" fill="#E8A63C" />
+      </g>
+      {/* Ground line */}
+      <line x1="8" y1="60" x2="72" y2="60" stroke="#E8A63C" strokeWidth="0.8" opacity="0.3" />
       {/* Train */}
-      <g>
-        <rect x="18" y="48" width="44" height="14" rx="5" fill="#E8A63C" />
-        <rect x="22" y="51" width="10" height="6" rx="2" fill="#1F3A5F" />
-        <rect x="35" y="51" width="10" height="6" rx="2" fill="#1F3A5F" />
-        <rect x="48" y="51" width="10" height="6" rx="2" fill="#1F3A5F" />
-        {/* Wheels */}
-        <circle cx="26" cy="64" r="2.5" fill="#E8A63C" />
-        <circle cx="54" cy="64" r="2.5" fill="#E8A63C" />
-        {/* Track */}
-        <line
-          x1="10"
-          y1="66.5"
-          x2="70"
-          y2="66.5"
-          stroke="#E8A63C"
-          strokeWidth="1"
-          opacity="0.4"
-        />
+      <g opacity="0.6">
+        <rect x="20" y="62" width="40" height="8" rx="3" fill="#E8A63C" />
+        <rect x="24" y="64" width="8" height="4" rx="1.5" fill="#1F3A5F" />
+        <rect x="34" y="64" width="8" height="4" rx="1.5" fill="#1F3A5F" />
+        <rect x="44" y="64" width="8" height="4" rx="1.5" fill="#1F3A5F" />
+        <circle cx="26" cy="72" r="1.5" fill="#E8A63C" opacity="0.5" />
+        <circle cx="54" cy="72" r="1.5" fill="#E8A63C" opacity="0.5" />
       </g>
+      {/* Track */}
+      <line x1="8" y1="73.5" x2="72" y2="73.5" stroke="#E8A63C" strokeWidth="0.6" opacity="0.25" />
     </svg>
   );
 }
 
-function SkylineBackground() {
+function MumbaiSkylineBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       <svg
         className="absolute bottom-0 left-0 w-full"
-        viewBox="0 0 400 100"
+        viewBox="0 0 400 120"
         fill="none"
         preserveAspectRatio="xMidYMax slice"
         xmlns="http://www.w3.org/2000/svg"
-        style={{ height: "28%" }}
+        style={{ height: "32%" }}
       >
         <defs>
           <linearGradient id="skyFade" x1="0" y1="0" x2="0" y2="1">
@@ -77,42 +64,86 @@ function SkylineBackground() {
             <stop offset="100%" stopColor="#172D4A" stopOpacity="0.5" />
           </linearGradient>
         </defs>
-        <rect width="400" height="100" fill="url(#skyFade)" />
+        <rect width="400" height="120" fill="url(#skyFade)" />
 
-        {/* Skyline silhouette — single path, very faint */}
-        <path
-          d="M0 100 L0 72 L8 72 L8 58 L14 58 L14 65 L22 65 L22 48 L28 48 L28 62 L36 62 L36 55 L42 55 L42 68 L52 68 L52 42 L56 42 L56 60 L64 60 L64 50 L70 50 L70 65 L80 65 L80 54 L86 54 L86 44 L90 44 L90 62 L100 62 L100 70 L108 70 L108 52 L112 52 L112 38 L116 38 L116 55 L124 55 L124 64 L134 64 L134 56 L138 56 L138 70 L148 70 L148 46 L152 42 L152 70 L160 70 L160 58 L166 58 L166 48 L170 48 L170 62 L180 62 L180 70 L188 70 L188 54 L192 54 L192 40 L196 40 L196 58 L204 58 L204 66 L214 66 L214 52 L218 52 L218 44 L222 44 L222 60 L232 60 L232 68 L240 68 L240 50 L244 46 L248 46 L248 62 L256 62 L256 56 L262 56 L262 42 L266 42 L266 58 L276 58 L276 66 L284 66 L284 54 L288 54 L288 48 L292 48 L292 64 L302 64 L302 72 L312 72 L312 56 L316 56 L316 46 L320 46 L320 60 L328 60 L328 68 L338 68 L338 58 L342 58 L342 52 L346 52 L346 66 L356 66 L356 72 L364 72 L364 60 L370 60 L370 54 L374 54 L374 68 L384 68 L384 62 L390 62 L390 72 L400 72 L400 100 Z"
-          fill="#A8B8CC"
-          opacity="0.06"
-        />
+        {/* Mumbai skyline — Gateway of India, Taj Hotel, skyscrapers */}
+        <g fill="none" stroke="#A8B8CC" strokeWidth="0.6" opacity="0.12">
+          {/* Left buildings */}
+          <rect x="5" y="68" width="12" height="32" rx="1" fill="#A8B8CC" fillOpacity="0.05" />
+          <rect x="20" y="58" width="10" height="42" rx="1" fill="#A8B8CC" fillOpacity="0.05" />
+          <rect x="33" y="52" width="8" height="48" rx="1" fill="#A8B8CC" fillOpacity="0.05" />
+          <rect x="44" y="62" width="14" height="38" rx="1" fill="#A8B8CC" fillOpacity="0.05" />
 
-        {/* Sea Link cables */}
-        <g opacity="0.08" stroke="#A8B8CC" strokeWidth="0.5" fill="none">
-          <line x1="151" y1="42" x2="151" y2="70" stroke="#A8B8CC" strokeWidth="1.5" />
-          <line x1="247" y1="46" x2="247" y2="70" stroke="#A8B8CC" strokeWidth="1.5" />
-          <path d="M120 68 Q151 38 182 68" />
-          <path d="M216 68 Q247 40 278 68" />
+          {/* Taj Mahal Palace Hotel dome */}
+          <rect x="70" y="48" width="24" height="52" rx="1" fill="#A8B8CC" fillOpacity="0.05" />
+          <path d="M72 48 Q82 32 94 48" strokeWidth="0.8" />
+          <line x1="82" y1="32" x2="82" y2="48" strokeWidth="0.5" />
+
+          {/* Gateway of India */}
+          <rect x="110" y="54" width="30" height="46" rx="1" fill="#A8B8CC" fillOpacity="0.06" />
+          <path d="M112 54 Q125 38 138 54" strokeWidth="0.8" />
+          <rect x="119" y="68" width="12" height="32" rx="4" fill="#A8B8CC" fillOpacity="0.03" />
+          <circle cx="125" cy="44" r="4" strokeWidth="0.5" />
+
+          {/* Mid-city buildings */}
+          <rect x="150" y="56" width="10" height="44" rx="1" fill="#A8B8CC" fillOpacity="0.04" />
+          <rect x="163" y="44" width="8" height="56" rx="1" fill="#A8B8CC" fillOpacity="0.04" />
+          <rect x="174" y="50" width="12" height="50" rx="1" fill="#A8B8CC" fillOpacity="0.04" />
+          <rect x="190" y="40" width="7" height="60" rx="1" fill="#A8B8CC" fillOpacity="0.04" />
+          <rect x="200" y="54" width="10" height="46" rx="1" fill="#A8B8CC" fillOpacity="0.04" />
+
+          {/* Sea Link towers + cables */}
+          <line x1="228" y1="38" x2="228" y2="100" strokeWidth="1" />
+          <path d="M210 80 Q228 50 246 80" strokeWidth="0.5" />
+          <path d="M215 85 Q228 60 241 85" strokeWidth="0.4" />
+          <line x1="268" y1="42" x2="268" y2="100" strokeWidth="1" />
+          <path d="M250 82 Q268 52 286 82" strokeWidth="0.5" />
+
+          {/* Right side buildings */}
+          <rect x="290" y="52" width="9" height="48" rx="1" fill="#A8B8CC" fillOpacity="0.04" />
+          <rect x="302" y="44" width="12" height="56" rx="1" fill="#A8B8CC" fillOpacity="0.04" />
+          <rect x="317" y="56" width="8" height="44" rx="1" fill="#A8B8CC" fillOpacity="0.04" />
+          <rect x="328" y="48" width="10" height="52" rx="1" fill="#A8B8CC" fillOpacity="0.04" />
+          <rect x="342" y="60" width="12" height="40" rx="1" fill="#A8B8CC" fillOpacity="0.04" />
+          <rect x="358" y="54" width="8" height="46" rx="1" fill="#A8B8CC" fillOpacity="0.04" />
+          <rect x="370" y="64" width="10" height="36" rx="1" fill="#A8B8CC" fillOpacity="0.04" />
+          <rect x="384" y="58" width="8" height="42" rx="1" fill="#A8B8CC" fillOpacity="0.04" />
+        </g>
+
+        {/* Clouds */}
+        <g fill="#A8B8CC" opacity="0.06">
+          <ellipse cx="60" cy="30" rx="18" ry="6" />
+          <ellipse cx="200" cy="22" rx="14" ry="5" />
+          <ellipse cx="340" cy="28" rx="20" ry="7" />
+        </g>
+
+        {/* Hot air balloon */}
+        <g opacity="0.08" stroke="#E8A63C" strokeWidth="0.5" fill="none">
+          <ellipse cx="50" cy="14" rx="6" ry="8" />
+          <rect x="48" y="22" width="4" height="3" rx="0.5" />
+        </g>
+
+        {/* Airplane */}
+        <g opacity="0.07" fill="#A8B8CC">
+          <path d="M365 12 L372 14 L365 16 Z" />
+          <rect x="355" y="13.5" width="10" height="1" />
         </g>
 
         {/* Track lines */}
-        <g opacity="0.05" stroke="#E8A63C">
-          <line x1="0" y1="88" x2="400" y2="88" strokeWidth="0.8" />
-          <line x1="0" y1="90" x2="400" y2="90" strokeWidth="0.5" />
+        <g opacity="0.06" stroke="#E8A63C">
+          <line x1="0" y1="102" x2="400" y2="102" strokeWidth="0.8" />
+          <line x1="0" y1="104" x2="400" y2="104" strokeWidth="0.5" />
         </g>
 
-        {/* Tiny window lights */}
-        <g fill="#E8A63C" opacity="0.12">
-          <rect x="53" y="50" width="1.5" height="1.5" />
-          <rect x="88" y="48" width="1.5" height="1.5" />
-          <rect x="113" y="42" width="1.5" height="1.5" />
-          <rect x="167" y="52" width="1.5" height="1.5" />
-          <rect x="193" y="44" width="1.5" height="1.5" />
-          <rect x="219" y="48" width="1.5" height="1.5" />
-          <rect x="263" y="46" width="1.5" height="1.5" />
-          <rect x="289" y="52" width="1.5" height="1.5" />
-          <rect x="317" y="50" width="1.5" height="1.5" />
-          <rect x="343" y="56" width="1.5" height="1.5" />
-          <rect x="371" y="58" width="1.5" height="1.5" />
+        {/* Window lights */}
+        <g fill="#E8A63C" opacity="0.1">
+          <rect x="24" y="64" width="1.5" height="1.5" />
+          <rect x="36" y="58" width="1.5" height="1.5" />
+          <rect x="167" y="50" width="1.5" height="1.5" />
+          <rect x="193" y="46" width="1.5" height="1.5" />
+          <rect x="306" y="50" width="1.5" height="1.5" />
+          <rect x="332" y="54" width="1.5" height="1.5" />
+          <rect x="362" y="60" width="1.5" height="1.5" />
         </g>
       </svg>
     </div>
@@ -128,14 +159,14 @@ export default function OnboardingPage() {
       <div className="flex flex-col items-center justify-center px-[32px] flex-1 relative"
         style={{ paddingTop: "env(safe-area-inset-top, 0px)", paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
       >
-        <SkylineBackground />
+        <MumbaiSkylineBackground />
 
         {/* Content above background */}
         <div className="relative z-10 flex flex-col items-center w-full">
           {/* Logo + Title */}
           <div className="flex flex-col items-center pb-[40px]">
             <div className="pb-[24px]">
-              <MumbaiSkylineIcon />
+              <MumbaiSkylineSVG />
             </div>
             <div className="pb-[8px]">
               <h1
@@ -174,26 +205,32 @@ export default function OnboardingPage() {
           {/* Buttons */}
           <div className="flex flex-col gap-[12px] w-full max-w-[338px]">
             <button
-              onClick={() => router.push("/intro")}
+              onClick={() => {
+                try { localStorage.setItem("fatafat_user_type", "new"); } catch {}
+                router.push("/walkthrough");
+              }}
               className="bg-amber-500 rounded-[16px] px-[20px] py-[16px] text-left w-full"
             >
               <p className="font-semibold text-[16px] leading-[24px] text-text-primary">
                 I&apos;m new here
               </p>
               <p className="text-[12px] leading-[16px] text-[rgba(31,58,95,0.65)] pt-[2px]">
-                Show me the basics first, then let me ride
+                Take a quick walkthrough of the app
               </p>
             </button>
 
             <button
-              onClick={() => router.push("/home")}
+              onClick={() => {
+                try { localStorage.setItem("fatafat_user_type", "regular"); } catch {}
+                router.push("/home");
+              }}
               className="border-[1.119px] border-[rgba(248,240,228,0.25)] rounded-[16px] px-[20px] py-[16px] text-left w-full backdrop-blur-sm"
             >
               <p className="font-semibold text-[16px] leading-[24px] text-text-on-dark">
                 I ride daily
               </p>
               <p className="text-[12px] leading-[16px] text-text-placeholder pt-[2px]">
-                Keep it fast and compact
+                Skip the intro, let&apos;s go
               </p>
             </button>
           </div>

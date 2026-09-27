@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import TopBar from "@/components/shared/TopBar";
@@ -114,7 +115,36 @@ function CommuteRow({ route, isLast }: { route: Route; isLast: boolean }) {
   );
 }
 
+function NewUserPrompt() {
+  return (
+    <div className="px-[16px] pb-[8px]">
+      <div className="bg-cream-50 border-[1.119px] border-dashed border-cream-400 rounded-[16px] px-[20px] py-[20px] flex flex-col items-center gap-[8px]">
+        <p
+          className="font-[family-name:var(--font-heading)] font-medium text-[16px] leading-[24px] text-navy-900 text-center"
+          style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
+        >
+          Plan your first trip
+        </p>
+        <p className="text-[12px] leading-[18px] text-text-tertiary text-center max-w-[260px]">
+          Search for a route below and your frequent trips will appear here automatically.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function HomePage() {
+  const [isNewUser, setIsNewUser] = useState(true);
+
+  useEffect(() => {
+    try {
+      const userType = localStorage.getItem("fatafat_user_type");
+      setIsNewUser(userType === "new" || userType === null);
+    } catch {
+      setIsNewUser(false);
+    }
+  }, []);
+
   return (
     <div className="bg-cream-100 flex flex-col flex-1">
       <TopBar />
@@ -149,26 +179,32 @@ export default function HomePage() {
           </Link>
         </div>
 
-        {/* Section header */}
-        <div className="flex items-center justify-between px-[16px] pb-[4px]">
-          <span className="font-semibold text-[12px] leading-[16px] text-text-muted tracking-[0.84px] uppercase">
-            Daily commute
-          </span>
-          <button className="text-[12px] leading-[16px] text-text-muted text-center">
-            All routes
-          </button>
-        </div>
+        {isNewUser ? (
+          <NewUserPrompt />
+        ) : (
+          <>
+            {/* Section header */}
+            <div className="flex items-center justify-between px-[16px] pb-[4px]">
+              <span className="font-semibold text-[12px] leading-[16px] text-text-muted tracking-[0.84px] uppercase">
+                Daily commute
+              </span>
+              <button className="text-[12px] leading-[16px] text-text-muted text-center">
+                All routes
+              </button>
+            </div>
 
-        {/* Routes list */}
-        <div className="border-t-[1.119px] border-border-light">
-          {mockRoutes.map((route, i) => (
-            <CommuteRow
-              key={`${route.from.id}-${route.to.id}`}
-              route={route}
-              isLast={i === mockRoutes.length - 1}
-            />
-          ))}
-        </div>
+            {/* Routes list */}
+            <div className="border-t-[1.119px] border-border-light">
+              {mockRoutes.map((route, i) => (
+                <CommuteRow
+                  key={`${route.from.id}-${route.to.id}`}
+                  route={route}
+                  isLast={i === mockRoutes.length - 1}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
