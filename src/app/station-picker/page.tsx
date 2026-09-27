@@ -80,7 +80,7 @@ export default function StationPickerPage() {
 
   function handleSearch() {
     if (from && to) {
-      router.push("/journey");
+      router.push(`/journey?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`);
     }
   }
 

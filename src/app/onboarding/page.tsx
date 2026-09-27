@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import MobileShell from "@/components/shared/MobileShell";
 
 function MumbaiSkylineIcon() {
   return (
@@ -124,8 +123,10 @@ export default function OnboardingPage() {
   const router = useRouter();
 
   return (
-    <MobileShell>
-      <div className="bg-navy-900 flex flex-col items-center justify-center px-[32px] flex-1 relative overflow-hidden">
+    <div className="mx-auto w-full max-w-[402px] h-dvh flex flex-col bg-navy-900 relative overflow-hidden">
+      <div className="flex flex-col items-center justify-center px-[32px] flex-1 relative"
+        style={{ paddingTop: "env(safe-area-inset-top, 0px)", paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+      >
         <SkylineBackground />
 
         {/* Content above background */}
@@ -200,6 +201,6 @@ export default function OnboardingPage() {
         {/* Bottom progress bar */}
         <div className="absolute bottom-0 left-0 right-0 h-[4px] bg-[rgba(232,166,60,0.25)] z-10" />
       </div>
-    </MobileShell>
+    </div>
   );
 }

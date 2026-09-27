@@ -26,7 +26,9 @@ export default function BottomNav() {
   }
 
   return (
-    <nav className="bg-cream-50 border-t-[1.119px] border-border-dark flex items-center h-[64px] shrink-0">
+    <nav className="bg-cream-50 border-t-[1.119px] border-border-dark flex items-center shrink-0"
+      style={{ height: "64px", paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+    >
       {tabs.map((tab) => {
         const active = isActive(tab.id);
         const Icon = iconMap[tab.id];

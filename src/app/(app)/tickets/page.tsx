@@ -18,6 +18,53 @@ const historyItems = [
   { from: "Churchgate", to: "Bandra", date: "Sep 14", type: "Single", price: "₹13" },
 ];
 
+const qrPattern = [
+  [1,1,1,1,1,1,1,0,1,0,1,1,0,0,1,1,1,1,1,1,1],
+  [1,0,0,0,0,0,1,0,0,1,0,1,1,0,1,0,0,0,0,0,1],
+  [1,0,1,1,1,0,1,0,1,1,0,0,1,0,1,0,1,1,1,0,1],
+  [1,0,1,1,1,0,1,0,0,1,1,0,0,0,1,0,1,1,1,0,1],
+  [1,0,1,1,1,0,1,0,1,0,0,1,1,0,1,0,1,1,1,0,1],
+  [1,0,0,0,0,0,1,0,0,0,1,0,1,0,1,0,0,0,0,0,1],
+  [1,1,1,1,1,1,1,0,1,0,1,0,1,0,1,1,1,1,1,1,1],
+  [0,0,0,0,0,0,0,0,1,1,0,1,0,0,0,0,0,0,0,0,0],
+  [1,0,1,1,1,0,1,1,0,0,1,0,1,1,0,1,1,0,1,0,1],
+  [0,1,0,0,1,1,0,1,1,0,0,1,0,0,1,0,1,1,0,1,0],
+  [1,1,0,1,0,0,1,0,1,1,0,1,1,0,0,1,0,0,1,1,0],
+  [0,0,1,0,1,1,0,0,0,1,1,0,1,1,0,1,0,1,0,0,1],
+  [1,0,0,1,1,0,1,1,1,0,0,1,0,0,1,1,1,0,1,1,0],
+  [0,0,0,0,0,0,0,0,1,0,1,0,1,0,0,1,0,1,0,0,1],
+  [1,1,1,1,1,1,1,0,0,1,0,1,0,1,1,0,1,0,1,1,0],
+  [1,0,0,0,0,0,1,0,1,0,1,0,1,0,0,1,1,0,0,1,1],
+  [1,0,1,1,1,0,1,0,1,1,0,0,1,1,0,0,1,1,1,0,0],
+  [1,0,1,1,1,0,1,0,0,1,1,1,0,0,1,0,0,1,0,1,1],
+  [1,0,1,1,1,0,1,0,1,0,0,1,1,0,1,1,0,0,1,0,0],
+  [1,0,0,0,0,0,1,0,0,1,0,0,1,0,0,1,0,1,1,1,0],
+  [1,1,1,1,1,1,1,0,1,0,1,1,0,1,1,0,1,0,0,1,1],
+];
+
+function TicketQRCode() {
+  const cellSize = 5;
+  const size = 21 * cellSize;
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} xmlns="http://www.w3.org/2000/svg">
+      {qrPattern.map((row, y) =>
+        row.map((cell, x) =>
+          cell === 1 ? (
+            <rect
+              key={`${x}-${y}`}
+              x={x * cellSize}
+              y={y * cellSize}
+              width={cellSize}
+              height={cellSize}
+              fill="#1F3A5F"
+            />
+          ) : null
+        )
+      )}
+    </svg>
+  );
+}
+
 const fareOptions = [
   { label: "Single journey", desc: "One way, valid same day", secondPrice: "₹15", firstPrice: "₹50" },
   { label: "Return", desc: "Both ways, same day", secondPrice: "₹28", firstPrice: "₹95" },
@@ -86,9 +133,7 @@ function MyTicketsTab() {
           </div>
 
           <div className="bg-cream-50 rounded-[12px] flex items-center justify-center h-[148px] mt-[12px]">
-            <div className="w-[110px] h-[110px] bg-cream-200 rounded-[8px] flex items-center justify-center">
-              <span className="text-text-muted text-[10px]">QR Code</span>
-            </div>
+            <TicketQRCode />
           </div>
 
           <p className="text-[12px] leading-[16px] text-[#5a7090] text-center pt-[8px]">
