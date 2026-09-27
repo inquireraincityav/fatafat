@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
 import TopBar from "@/components/shared/TopBar";
 import LineBadge from "@/components/shared/LineBadge";
 import CrowdBadge from "@/components/shared/CrowdBadge";
@@ -108,8 +108,6 @@ function CommuteRow({ route, isLast }: { route: Route; isLast: boolean }) {
 }
 
 export default function HomePage() {
-  const [expanded, setExpanded] = useState(false);
-
   return (
     <div className="bg-cream-100 flex flex-col flex-1">
       <TopBar />
@@ -125,8 +123,8 @@ export default function HomePage() {
       <div className="bg-cream-100 flex flex-col pt-[10px]">
         {/* Search bar */}
         <div className="px-[16px] pb-[8px]">
-          <button
-            onClick={() => setExpanded(!expanded)}
+          <Link
+            href="/station-picker"
             className="bg-cream-50 border-[1.119px] border-border-medium rounded-[12px] flex items-center gap-[10px] px-[16px] py-[12px] w-full"
           >
             <SearchIcon />
@@ -141,7 +139,7 @@ export default function HomePage() {
                 </span>
               </div>
             </div>
-          </button>
+          </Link>
         </div>
 
         {/* Section header */}

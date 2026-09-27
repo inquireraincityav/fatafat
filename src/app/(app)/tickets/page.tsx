@@ -288,14 +288,14 @@ function BuyTab() {
       </div>
 
       {/* CTA button */}
-      <button className="bg-amber-500 rounded-[16px] py-[16px] w-full">
+      <Link href="/tickets/payment" className="bg-amber-500 rounded-[16px] py-[16px] w-full flex items-center justify-center">
         <span className="font-semibold text-[16px] leading-[24px] text-navy-900 text-center">
           Proceed to pay &middot;{" "}
           {ticketClass === "second"
             ? fareOptions[selectedFare].secondPrice
             : fareOptions[selectedFare].firstPrice}
         </span>
-      </button>
+      </Link>
     </div>
   );
 }

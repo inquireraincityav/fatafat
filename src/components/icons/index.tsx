@@ -156,3 +156,65 @@ export function ToDotIcon({ className = "" }: { className?: string }) {
     </svg>
   );
 }
+
+export function GooglePayIcon({ className = "" }: { className?: string }) {
+  return (
+    <div className={`bg-white rounded-[8px] w-[32px] h-[32px] flex items-center justify-center ${className}`}>
+      <span className="text-[7px] font-bold leading-none">
+        <span className="text-[#4285f4]">G</span>
+        <span className="text-[#555] font-normal">Pay</span>
+      </span>
+    </div>
+  );
+}
+
+export function ApplePayIcon({ className = "" }: { className?: string }) {
+  return (
+    <div className={`bg-black rounded-[8px] w-[32px] h-[32px] flex items-center justify-center ${className}`}>
+      <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M11.5 5.5C10.5 4.5 9.5 4.8 9 5C8.5 5.2 8 5.3 7 5C6 4.7 5 5 4.5 5.5C3.5 6.5 3.5 9 5 11.5C5.5 12.5 6.5 13.5 7 13.5C7.5 13.5 8 13 8.5 13C9 13 9.5 13.5 10 13.5C10.5 13.5 11 12.5 11.5 11.5C12 10.5 12.5 7 11.5 5.5Z" fill="white"/>
+        <path d="M9 2C9.5 1.3 10 1 10 1C10 1 10 2 9.5 2.8C9 3.5 8.5 4 8 4C8 4 7.8 3.5 9 2Z" fill="white"/>
+      </svg>
+    </div>
+  );
+}
+
+export function CreditCardIcon({ className = "" }: { className?: string }) {
+  return (
+    <div className={`bg-cream-200 rounded-[8px] w-[32px] h-[32px] flex items-center justify-center ${className}`}>
+      <svg width="16" height="13" viewBox="0 0 16 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0.5" y="0.5" width="15" height="12" rx="2" stroke="#6b6760" strokeWidth="1"/>
+        <path d="M0.5 4.5H15.5" stroke="#6b6760" strokeWidth="1"/>
+        <rect x="2.5" y="7.5" width="4" height="1.5" rx="0.5" fill="#6b6760"/>
+      </svg>
+    </div>
+  );
+}
+
+export function SwapIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path d="M11 2L13 4L11 6" stroke="#6b6760" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M3 4H13" stroke="#6b6760" strokeWidth="1.2" strokeLinecap="round"/>
+      <path d="M5 14L3 12L5 10" stroke="#6b6760" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M13 12H3" stroke="#6b6760" strokeWidth="1.2" strokeLinecap="round"/>
+    </svg>
+  );
+}
+
+export function LiveDotIcon({ className = "" }: { className?: string }) {
+  return (
+    <span className={`relative flex h-[8px] w-[8px] ${className}`}>
+      <span className="absolute inset-0 rounded-full bg-success opacity-30 scale-[2]" />
+      <span className="relative rounded-full bg-success h-[8px] w-[8px]" />
+    </span>
+  );
+}
+
+export function CloseIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 4L12 12M12 4L4 12" stroke="#6b6760" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  );
+}

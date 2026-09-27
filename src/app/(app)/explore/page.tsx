@@ -104,24 +104,24 @@ function PlanTab() {
       </div>
 
       <div className="bg-cream-100 border-t-[1.119px] border-border-light px-[16px] py-[12px] flex flex-col gap-[10px]">
-        <div className="bg-cream-50 border-[1.119px] border-border-light rounded-[16px] overflow-clip">
-          <button className="flex gap-[12px] items-center px-[16px] py-[12px] w-full border-b-[1.119px] border-border-light">
+        <Link href="/station-picker" className="bg-cream-50 border-[1.119px] border-border-light rounded-[16px] overflow-clip">
+          <div className="flex gap-[12px] items-center px-[16px] py-[12px] w-full border-b-[1.119px] border-border-light">
             <div className="bg-cream-200 flex items-center justify-center rounded-full w-[24px] h-[24px]">
               <FromDotIcon />
             </div>
             <span className="font-medium text-[14px] leading-[20px] text-text-muted">
               Starting station
             </span>
-          </button>
-          <button className="flex gap-[12px] items-center px-[16px] py-[12px] w-full">
+          </div>
+          <div className="flex gap-[12px] items-center px-[16px] py-[12px] w-full">
             <div className="bg-cream-200 flex items-center justify-center rounded-full w-[24px] h-[24px]">
               <ToDotIcon />
             </div>
             <span className="font-medium text-[14px] leading-[20px] text-text-muted">
               Destination station
             </span>
-          </button>
-        </div>
+          </div>
+        </Link>
 
         <div className="flex gap-[8px] items-start">
           <div className="bg-cream-200 flex h-[36px] items-start overflow-clip p-[3px] rounded-[12px] w-[146px]">
@@ -136,11 +136,11 @@ function PlanTab() {
               </span>
             </button>
           </div>
-          <button className="bg-cream-200 flex-1 flex flex-col h-[36px] items-center justify-center py-[8px] rounded-[12px]">
+          <Link href="/station-picker" className="bg-cream-200 flex-1 flex flex-col h-[36px] items-center justify-center py-[8px] rounded-[12px]">
             <span className="font-semibold text-[14px] leading-[20px] text-text-muted text-center">
               Pick stations
             </span>
-          </button>
+          </Link>
         </div>
       </div>
     </div>
@@ -198,11 +198,11 @@ function NetworkTab() {
       </div>
 
       <div className="px-[16px] py-[12px]">
-        <button className="bg-navy-900 w-full rounded-[12px] py-[10px]">
+        <Link href="/network-map" className="bg-navy-900 w-full rounded-[12px] py-[10px] flex items-center justify-center">
           <span className="font-semibold text-[14px] leading-[20px] text-cream-50 text-center">
-            Open full interactive map &rarr;
+            Open full interactive map →
           </span>
-        </button>
+        </Link>
       </div>
     </div>
   );
@@ -217,8 +217,9 @@ function BasicsTab() {
         </p>
       </div>
       {basicsItems.map((item) => (
-        <button
+        <Link
           key={item.title}
+          href="/intro"
           className="bg-cream-50 border-[1.119px] border-border-light rounded-[16px] overflow-clip flex gap-[12px] items-center p-[16px] w-full text-left"
         >
           <span className="text-[24px] leading-[32px] shrink-0">{item.emoji}</span>
@@ -231,7 +232,7 @@ function BasicsTab() {
             </p>
           </div>
           <ChevronRightIcon />
-        </button>
+        </Link>
       ))}
     </div>
   );
