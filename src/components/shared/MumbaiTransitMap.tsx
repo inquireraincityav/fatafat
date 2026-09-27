@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import type { Map as LeafletMap } from "leaflet";
+import "leaflet/dist/leaflet.css";
 
 type LineFilter = "all" | "western" | "central" | "harbour" | "metro";
 
@@ -178,7 +179,83 @@ export default function MumbaiTransitMap({
 }: MumbaiTransitMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<LeafletMap | null>(null);
-  const [ready, setReady] = useState(false);
+  const leafletRef = useRef<typeof import("leaflet") | null>(null);
+  const filterRef = useRef(activeFilter);
+  filterRef.current = activeFilter;
+
+  const renderLayers = useCallback(
+    (map: LeafletMap, L: typeof import("leaflet"), filter: LineFilter) => {
+      map.eachLayer((layer) => {
+        if (layer instanceof L.Polyline || layer instanceof L.CircleMarker) {
+          map.removeLayer(layer);
+        }
+      });
+      map.eachLayer((layer) => {
+        if (
+          layer instanceof L.Marker &&
+          (layer.options as Record<string, unknown>).isAreaLabel
+        ) {
+          map.removeLayer(layer);
+        }
+      });
+
+      const linesToShow =
+        filter === "all"
+          ? (["western", "central", "harbour", "metro"] as const)
+          : [filter];
+
+      linesToShow.forEach((line) => {
+        const coords = linePolylines[line];
+        if (!coords) return;
+        L.polyline(coords, {
+          color: LINE_COLORS[line],
+          weight: 4,
+          opacity: 0.85,
+        }).addTo(map);
+      });
+
+      const stationsToShow =
+        filter === "all"
+          ? allStations
+          : allStations.filter((s) => s.line === filter);
+
+      const zoom = map.getZoom();
+
+      stationsToShow.forEach((station) => {
+        const marker = L.circleMarker([station.lat, station.lng], {
+          radius: zoom >= 13 ? 5 : 3.5,
+          fillColor: LINE_COLORS[station.line],
+          color: dark ? "#1f2937" : "#ffffff",
+          weight: 2,
+          fillOpacity: 1,
+        }).addTo(map);
+
+        marker.bindTooltip(station.name, {
+          permanent: zoom >= 14,
+          direction: "right",
+          offset: [8, 0],
+          className: `transit-tooltip ${dark ? "dark" : "light"}`,
+        });
+      });
+
+      if (zoom >= 12) {
+        areaLabels.forEach((area) => {
+          const icon = L.divIcon({
+            html: `<span class="area-label ${dark ? "dark" : "light"}">${area.name}</span>`,
+            className: "area-label-container",
+            iconSize: [0, 0],
+            iconAnchor: [0, 0],
+          });
+          L.marker([area.lat, area.lng], {
+            icon,
+            interactive: false,
+            isAreaLabel: true,
+          } as L.MarkerOptions & { isAreaLabel: boolean }).addTo(map);
+        });
+      }
+    },
+    [dark]
+  );
 
   useEffect(() => {
     if (!mapRef.current || mapInstanceRef.current) return;
@@ -186,9 +263,11 @@ export default function MumbaiTransitMap({
     let cancelled = false;
 
     async function init() {
-      const L = (await import("leaflet")).default;
+      const L = await import("leaflet");
 
       if (cancelled || !mapRef.current) return;
+
+      leafletRef.current = L;
 
       const tileUrl = dark
         ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
@@ -208,97 +287,15 @@ export default function MumbaiTransitMap({
 
       mapInstanceRef.current = map;
 
-      function renderLines(filter: LineFilter) {
-        map.eachLayer((layer) => {
-          if (layer instanceof L.Polyline || layer instanceof L.CircleMarker) {
-            map.removeLayer(layer);
-          }
-        });
+      setTimeout(() => {
+        map.invalidateSize();
+      }, 100);
 
-        // remove old area labels
-        map.eachLayer((layer) => {
-          if (
-            layer instanceof L.Marker &&
-            (layer.options as Record<string, unknown>).isAreaLabel
-          ) {
-            map.removeLayer(layer);
-          }
-        });
-
-        const linesToShow =
-          filter === "all"
-            ? (["western", "central", "harbour", "metro"] as const)
-            : [filter];
-
-        linesToShow.forEach((line) => {
-          const coords = linePolylines[line];
-          if (!coords) return;
-
-          L.polyline(coords, {
-            color: LINE_COLORS[line],
-            weight: 4,
-            opacity: 0.85,
-          }).addTo(map);
-        });
-
-        const stationsToShow =
-          filter === "all"
-            ? allStations
-            : allStations.filter((s) => s.line === filter);
-
-        const zoom = map.getZoom();
-
-        stationsToShow.forEach((station) => {
-          const marker = L.circleMarker([station.lat, station.lng], {
-            radius: zoom >= 13 ? 5 : 3.5,
-            fillColor: LINE_COLORS[station.line],
-            color: dark ? "#1f2937" : "#ffffff",
-            weight: 2,
-            fillOpacity: 1,
-          }).addTo(map);
-
-          marker.bindTooltip(station.name, {
-            permanent: zoom >= 14,
-            direction: "right",
-            offset: [8, 0],
-            className: `transit-tooltip ${dark ? "dark" : "light"}`,
-          });
-
-          if (zoom >= 13 && zoom < 14) {
-            marker.bindTooltip(station.name, {
-              permanent: false,
-              direction: "right",
-              offset: [8, 0],
-              className: `transit-tooltip ${dark ? "dark" : "light"}`,
-            });
-          }
-        });
-
-        if (zoom >= 12) {
-          areaLabels.forEach((area) => {
-            const icon = L.divIcon({
-              html: `<span class="area-label ${dark ? "dark" : "light"}">${area.name}</span>`,
-              className: "area-label-container",
-              iconSize: [0, 0],
-              iconAnchor: [0, 0],
-            });
-
-            L.marker([area.lat, area.lng], {
-              icon,
-              interactive: false,
-              isAreaLabel: true,
-            } as L.MarkerOptions & { isAreaLabel: boolean }).addTo(map);
-          });
-        }
-      }
-
-      renderLines(activeFilter);
+      renderLayers(map, L, filterRef.current);
 
       map.on("zoomend", () => {
-        renderLines(activeFilter);
+        renderLayers(map, L, filterRef.current);
       });
-
-      setReady(true);
     }
 
     init();
@@ -310,86 +307,14 @@ export default function MumbaiTransitMap({
         mapInstanceRef.current = null;
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dark, compact, renderLayers]);
 
   useEffect(() => {
-    if (!mapInstanceRef.current || !ready) return;
-
+    if (!mapInstanceRef.current || !leafletRef.current) return;
     const map = mapInstanceRef.current;
-    const L = (window as unknown as { L: typeof import("leaflet") }).L;
-    if (!L) return;
+    const L = leafletRef.current;
 
-    map.eachLayer((layer) => {
-      if (layer instanceof L.Polyline || layer instanceof L.CircleMarker) {
-        map.removeLayer(layer);
-      }
-    });
-    map.eachLayer((layer) => {
-      if (
-        layer instanceof L.Marker &&
-        (layer.options as Record<string, unknown>).isAreaLabel
-      ) {
-        map.removeLayer(layer);
-      }
-    });
-
-    const linesToShow =
-      activeFilter === "all"
-        ? (["western", "central", "harbour", "metro"] as const)
-        : [activeFilter];
-
-    linesToShow.forEach((line) => {
-      const coords = linePolylines[line];
-      if (!coords) return;
-
-      L.polyline(coords, {
-        color: LINE_COLORS[line],
-        weight: 4,
-        opacity: 0.85,
-      }).addTo(map);
-    });
-
-    const stationsToShow =
-      activeFilter === "all"
-        ? allStations
-        : allStations.filter((s) => s.line === activeFilter);
-
-    const zoom = map.getZoom();
-
-    stationsToShow.forEach((station) => {
-      const marker = L.circleMarker([station.lat, station.lng], {
-        radius: zoom >= 13 ? 5 : 3.5,
-        fillColor: LINE_COLORS[station.line],
-        color: dark ? "#1f2937" : "#ffffff",
-        weight: 2,
-        fillOpacity: 1,
-      }).addTo(map);
-
-      marker.bindTooltip(station.name, {
-        permanent: zoom >= 14,
-        direction: "right",
-        offset: [8, 0],
-        className: `transit-tooltip ${dark ? "dark" : "light"}`,
-      });
-    });
-
-    if (zoom >= 12) {
-      areaLabels.forEach((area) => {
-        const icon = L.divIcon({
-          html: `<span class="area-label ${dark ? "dark" : "light"}">${area.name}</span>`,
-          className: "area-label-container",
-          iconSize: [0, 0],
-          iconAnchor: [0, 0],
-        });
-
-        L.marker([area.lat, area.lng], {
-          icon,
-          interactive: false,
-          isAreaLabel: true,
-        } as L.MarkerOptions & { isAreaLabel: boolean }).addTo(map);
-      });
-    }
+    renderLayers(map, L, activeFilter);
 
     if (activeFilter !== "all") {
       const coords = linePolylines[activeFilter];
@@ -399,59 +324,13 @@ export default function MumbaiTransitMap({
         });
       }
     }
-  }, [activeFilter, ready, dark]);
+  }, [activeFilter, renderLayers]);
 
   return (
-    <>
-      <style jsx global>{`
-        .area-label-container {
-          background: none !important;
-          border: none !important;
-          box-shadow: none !important;
-        }
-        .area-label {
-          font-family: var(--font-body), 'Inter', system-ui, sans-serif;
-          font-size: 10px;
-          font-weight: 600;
-          letter-spacing: 0.5px;
-          text-transform: uppercase;
-          white-space: nowrap;
-          pointer-events: none;
-        }
-        .area-label.light {
-          color: rgba(55, 65, 81, 0.55);
-          text-shadow: 0 0 3px rgba(255,255,255,0.8);
-        }
-        .area-label.dark {
-          color: rgba(156, 163, 175, 0.5);
-          text-shadow: 0 0 3px rgba(0,0,0,0.5);
-        }
-        .transit-tooltip {
-          font-family: var(--font-body), 'Inter', system-ui, sans-serif;
-          font-size: 11px;
-          font-weight: 500;
-          padding: 2px 6px !important;
-          border-radius: 4px !important;
-          box-shadow: 0 1px 4px rgba(0,0,0,0.15) !important;
-        }
-        .transit-tooltip.light {
-          background: #fffdf8 !important;
-          color: #1a2744 !important;
-          border: 1px solid #e0d5c5 !important;
-        }
-        .transit-tooltip.dark {
-          background: #1f2937 !important;
-          color: #f0e8da !important;
-          border: 1px solid #374151 !important;
-        }
-        .transit-tooltip::before {
-          border-right-color: inherit !important;
-        }
-        .leaflet-container {
-          font-family: var(--font-body), 'Inter', system-ui, sans-serif;
-        }
-      `}</style>
-      <div ref={mapRef} className={`w-full h-full ${className}`} />
-    </>
+    <div
+      ref={mapRef}
+      className={className}
+      style={{ width: "100%", height: "100%", minHeight: compact ? 280 : 400 }}
+    />
   );
 }

@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "leaflet/dist/leaflet.css";
 
 @theme inline {
   --color-navy-900: #1f3a5f;
@@ -54,4 +53,49 @@ body {
   color: var(--color-text-secondary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Leaflet map custom styles */
+.area-label-container {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.area-label {
+  font-family: var(--font-body), 'Inter', system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.area-label.light {
+  color: rgba(55, 65, 81, 0.55);
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
+}
+.area-label.dark {
+  color: rgba(156, 163, 175, 0.5);
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+.transit-tooltip {
+  font-family: var(--font-body), 'Inter', system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15) !important;
+}
+.transit-tooltip.light {
+  background: #fffdf8 !important;
+  color: #1a2744 !important;
+  border: 1px solid #e0d5c5 !important;
+}
+.transit-tooltip.dark {
+  background: #1f2937 !important;
+  color: #f0e8da !important;
+  border: 1px solid #374151 !important;
+}
+.leaflet-container {
+  font-family: var(--font-body), 'Inter', system-ui, sans-serif;
 }
