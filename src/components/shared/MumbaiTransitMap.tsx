@@ -269,10 +269,6 @@ export default function MumbaiTransitMap({
 
       leafletRef.current = L;
 
-      const tileUrl = dark
-        ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-        : "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png";
-
       const map = L.map(mapRef.current, {
         center: [19.04, 72.87],
         zoom: compact ? 11 : 12,
@@ -280,10 +276,13 @@ export default function MumbaiTransitMap({
         attributionControl: false,
       });
 
-      L.tileLayer(tileUrl, {
-        maxZoom: 18,
-        subdomains: "abcd",
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
       }).addTo(map);
+
+      if (dark && mapRef.current) {
+        mapRef.current.classList.add("map-dark-tiles");
+      }
 
       mapInstanceRef.current = map;
 
