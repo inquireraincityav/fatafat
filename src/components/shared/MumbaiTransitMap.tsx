@@ -276,13 +276,12 @@ export default function MumbaiTransitMap({
         attributionControl: false,
       });
 
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 19,
-        subdomains: "abcd",
       }).addTo(map);
 
-      if (dark && mapRef.current) {
-        mapRef.current.classList.add("map-dark-tiles");
+      if (mapRef.current) {
+        mapRef.current.classList.add("map-muted-tiles");
       }
 
       mapInstanceRef.current = map;
