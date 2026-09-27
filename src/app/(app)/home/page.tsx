@@ -58,10 +58,11 @@ function LiveDot() {
 
 function CommuteRow({ route, isLast }: { route: Route; isLast: boolean }) {
   return (
-    <div
+    <Link
+      href={`/journey?from=${encodeURIComponent(route.from.name)}&to=${encodeURIComponent(route.to.name)}`}
       className={`bg-cream-100 flex flex-col overflow-clip ${
         !isLast ? "border-b-[1.119px] border-border-light" : ""
-      }`}
+      } active:bg-cream-200 transition-colors`}
     >
       <div className="flex gap-[12px] items-center px-[16px] py-[10px]">
         <LineBadge line={route.line} />
@@ -109,7 +110,7 @@ function CommuteRow({ route, isLast }: { route: Route; isLast: boolean }) {
           <CrowdBadge level={route.crowdLevel} />
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
