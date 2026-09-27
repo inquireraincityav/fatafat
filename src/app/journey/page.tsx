@@ -381,7 +381,7 @@ function JourneyContent() {
             </span>
           </Link>
           <Link
-            href="/on-board"
+            href={`/on-board?from=${encodeURIComponent(routeData.fromName)}&to=${encodeURIComponent(routeData.toName)}&speed=${route.speed}`}
             className="bg-navy-900 rounded-[16px] py-[14px] flex-1 flex items-center justify-center"
           >
             <span className="font-semibold text-[14px] leading-[20px] text-cream-50 text-center">

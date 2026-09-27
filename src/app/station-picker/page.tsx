@@ -86,7 +86,9 @@ export default function StationPickerPage() {
 
   return (
     <MobileShell>
-      <div className="bg-cream-100 flex flex-col flex-1">
+      <div className="bg-cream-100 flex flex-col flex-1 min-h-0"
+        style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
+      >
         {/* Header */}
         <div className="flex gap-[12px] items-center pt-[20px] px-[16px] pb-[12px]">
           <button onClick={() => router.back()} className="shrink-0">
