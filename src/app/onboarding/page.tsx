@@ -66,117 +66,54 @@ function SkylineBackground() {
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       <svg
         className="absolute bottom-0 left-0 w-full"
-        viewBox="0 0 400 220"
+        viewBox="0 0 400 100"
         fill="none"
         preserveAspectRatio="xMidYMax slice"
         xmlns="http://www.w3.org/2000/svg"
-        style={{ height: "45%" }}
+        style={{ height: "28%" }}
       >
         <defs>
           <linearGradient id="skyFade" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#1F3A5F" stopOpacity="0" />
-            <stop offset="40%" stopColor="#17304F" stopOpacity="0.6" />
-            <stop offset="100%" stopColor="#0F2340" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#172D4A" stopOpacity="0.5" />
           </linearGradient>
         </defs>
-        <rect width="400" height="220" fill="url(#skyFade)" />
+        <rect width="400" height="100" fill="url(#skyFade)" />
 
-        {/* Far buildings — faint */}
-        <g opacity="0.08" fill="#A8B8CC">
-          <rect x="0" y="100" width="18" height="120" />
-          <rect x="22" y="80" width="14" height="140" />
-          <rect x="40" y="110" width="20" height="110" />
-          <rect x="65" y="70" width="12" height="150" />
-          <rect x="82" y="95" width="16" height="125" />
-          <rect x="102" y="60" width="10" height="160" />
-          <rect x="116" y="85" width="18" height="135" />
-          <rect x="140" y="105" width="14" height="115" />
-          <rect x="158" y="75" width="11" height="145" />
-          <rect x="174" y="90" width="20" height="130" />
-          <rect x="200" y="65" width="9" height="155" />
-          <rect x="214" y="100" width="16" height="120" />
-          <rect x="235" y="80" width="13" height="140" />
-          <rect x="253" y="110" width="18" height="110" />
-          <rect x="276" y="72" width="11" height="148" />
-          <rect x="292" y="95" width="15" height="125" />
-          <rect x="312" y="60" width="10" height="160" />
-          <rect x="327" y="88" width="18" height="132" />
-          <rect x="350" y="105" width="14" height="115" />
-          <rect x="369" y="78" width="12" height="142" />
-          <rect x="385" y="95" width="15" height="125" />
-        </g>
-
-        {/* Mid buildings — slightly brighter */}
-        <g opacity="0.05" fill="#A8B8CC">
-          <rect x="10" y="130" width="24" height="90" />
-          <rect x="50" y="118" width="20" height="102" />
-          <rect x="90" y="125" width="28" height="95" />
-          <rect x="135" y="115" width="18" height="105" />
-          <rect x="170" y="128" width="22" height="92" />
-          <rect x="210" y="120" width="26" height="100" />
-          <rect x="255" y="130" width="20" height="90" />
-          <rect x="290" y="118" width="24" height="102" />
-          <rect x="330" y="125" width="18" height="95" />
-          <rect x="365" y="122" width="22" height="98" />
-        </g>
+        {/* Skyline silhouette — single path, very faint */}
+        <path
+          d="M0 100 L0 72 L8 72 L8 58 L14 58 L14 65 L22 65 L22 48 L28 48 L28 62 L36 62 L36 55 L42 55 L42 68 L52 68 L52 42 L56 42 L56 60 L64 60 L64 50 L70 50 L70 65 L80 65 L80 54 L86 54 L86 44 L90 44 L90 62 L100 62 L100 70 L108 70 L108 52 L112 52 L112 38 L116 38 L116 55 L124 55 L124 64 L134 64 L134 56 L138 56 L138 70 L148 70 L148 46 L152 42 L152 70 L160 70 L160 58 L166 58 L166 48 L170 48 L170 62 L180 62 L180 70 L188 70 L188 54 L192 54 L192 40 L196 40 L196 58 L204 58 L204 66 L214 66 L214 52 L218 52 L218 44 L222 44 L222 60 L232 60 L232 68 L240 68 L240 50 L244 46 L248 46 L248 62 L256 62 L256 56 L262 56 L262 42 L266 42 L266 58 L276 58 L276 66 L284 66 L284 54 L288 54 L288 48 L292 48 L292 64 L302 64 L302 72 L312 72 L312 56 L316 56 L316 46 L320 46 L320 60 L328 60 L328 68 L338 68 L338 58 L342 58 L342 52 L346 52 L346 66 L356 66 L356 72 L364 72 L364 60 L370 60 L370 54 L374 54 L374 68 L384 68 L384 62 L390 62 L390 72 L400 72 L400 100 Z"
+          fill="#A8B8CC"
+          opacity="0.06"
+        />
 
         {/* Sea Link cables */}
-        <g opacity="0.1" stroke="#A8B8CC" strokeWidth="0.6" fill="none">
-          {/* Left tower */}
-          <rect
-            x="148"
-            y="100"
-            width="3"
-            height="60"
-            fill="#A8B8CC"
-            opacity="0.1"
-          />
-          {/* Right tower */}
-          <rect
-            x="248"
-            y="100"
-            width="3"
-            height="60"
-            fill="#A8B8CC"
-            opacity="0.1"
-          />
-          {/* Main cables */}
-          <path d="M100 155 Q149.5 110 200 155" />
-          <path d="M200 155 Q249.5 110 300 155" />
-          {/* Secondary cables */}
-          <path d="M110 158 Q149.5 125 190 158" opacity="0.6" />
-          <path d="M210 158 Q249.5 125 290 158" opacity="0.6" />
+        <g opacity="0.08" stroke="#A8B8CC" strokeWidth="0.5" fill="none">
+          <line x1="151" y1="42" x2="151" y2="70" stroke="#A8B8CC" strokeWidth="1.5" />
+          <line x1="247" y1="46" x2="247" y2="70" stroke="#A8B8CC" strokeWidth="1.5" />
+          <path d="M120 68 Q151 38 182 68" />
+          <path d="M216 68 Q247 40 278 68" />
         </g>
 
-        {/* Track lines running across */}
-        <g opacity="0.06" stroke="#E8A63C">
-          <line x1="0" y1="185" x2="400" y2="185" strokeWidth="1" />
-          <line x1="0" y1="188" x2="400" y2="188" strokeWidth="0.5" />
-          {/* Sleepers */}
-          {Array.from({ length: 40 }).map((_, i) => (
-            <line
-              key={i}
-              x1={i * 10 + 2}
-              y1="183"
-              x2={i * 10 + 2}
-              y2="190"
-              strokeWidth="0.5"
-            />
-          ))}
+        {/* Track lines */}
+        <g opacity="0.05" stroke="#E8A63C">
+          <line x1="0" y1="88" x2="400" y2="88" strokeWidth="0.8" />
+          <line x1="0" y1="90" x2="400" y2="90" strokeWidth="0.5" />
         </g>
 
-        {/* Small star-like lights on buildings */}
-        <g fill="#E8A63C" opacity="0.15">
-          <circle cx="30" cy="90" r="1" />
-          <circle cx="70" cy="78" r="1" />
-          <circle cx="108" cy="68" r="1" />
-          <circle cx="165" cy="82" r="1" />
-          <circle cx="205" cy="72" r="1" />
-          <circle cx="242" cy="88" r="1" />
-          <circle cx="283" cy="80" r="1" />
-          <circle cx="320" cy="66" r="1" />
-          <circle cx="355" cy="92" r="1" />
-          <circle cx="390" cy="84" r="1" />
+        {/* Tiny window lights */}
+        <g fill="#E8A63C" opacity="0.12">
+          <rect x="53" y="50" width="1.5" height="1.5" />
+          <rect x="88" y="48" width="1.5" height="1.5" />
+          <rect x="113" y="42" width="1.5" height="1.5" />
+          <rect x="167" y="52" width="1.5" height="1.5" />
+          <rect x="193" y="44" width="1.5" height="1.5" />
+          <rect x="219" y="48" width="1.5" height="1.5" />
+          <rect x="263" y="46" width="1.5" height="1.5" />
+          <rect x="289" y="52" width="1.5" height="1.5" />
+          <rect x="317" y="50" width="1.5" height="1.5" />
+          <rect x="343" y="56" width="1.5" height="1.5" />
+          <rect x="371" y="58" width="1.5" height="1.5" />
         </g>
       </svg>
     </div>
