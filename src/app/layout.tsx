@@ -25,7 +25,10 @@ export const metadata: Metadata = {
     title: "Fatafat",
   },
   icons: {
-    icon: "/icons/icon-192.png",
+    icon: [
+      { url: "/icons/favicon.svg", type: "image/svg+xml" },
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
     apple: "/icons/icon-512.png",
   },
 };
