@@ -123,7 +123,8 @@ export default function OnboardingPage() {
   const router = useRouter();
 
   return (
-    <div className="mx-auto w-full max-w-[402px] h-dvh flex flex-col bg-navy-900 relative overflow-hidden">
+    <div className="fixed inset-0 flex justify-center bg-navy-900">
+      <div className="w-full max-w-[402px] flex flex-col overflow-hidden relative">
       <div className="flex flex-col items-center justify-center px-[32px] flex-1 relative"
         style={{ paddingTop: "env(safe-area-inset-top, 0px)", paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
       >
@@ -200,6 +201,7 @@ export default function OnboardingPage() {
 
         {/* Bottom progress bar */}
         <div className="absolute bottom-0 left-0 right-0 h-[4px] bg-[rgba(232,166,60,0.25)] z-10" />
+      </div>
       </div>
     </div>
   );

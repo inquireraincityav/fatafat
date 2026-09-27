@@ -235,7 +235,9 @@ export default function StationPickerPage() {
 
         {/* Search button */}
         {from && to && (
-          <div className="px-[16px] pb-[16px] pt-[8px] border-t-[1.119px] border-border-light bg-cream-100">
+          <div className="px-[16px] pb-[16px] pt-[8px] border-t-[1.119px] border-border-light bg-cream-100 shrink-0"
+            style={{ paddingBottom: "max(16px, env(safe-area-inset-bottom, 16px))" }}
+          >
             <button
               onClick={handleSearch}
               className="bg-amber-500 rounded-[16px] py-[16px] w-full"

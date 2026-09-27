@@ -106,9 +106,20 @@ function TabSwitcher({
   );
 }
 
-function MyTicketsTab() {
+function MyTicketsTab({ onBuyTicket }: { onBuyTicket: () => void }) {
   return (
     <div className="flex flex-col gap-[12px] overflow-y-auto px-[16px] pb-[16px]">
+      {/* Buy new ticket */}
+      <button
+        onClick={onBuyTicket}
+        className="bg-amber-500 rounded-[16px] px-[16px] py-[14px] flex items-center justify-center gap-[8px] shrink-0"
+      >
+        <span className="text-[20px] leading-[20px] text-navy-900 font-light">+</span>
+        <span className="font-semibold text-[14px] leading-[20px] text-navy-900">
+          Buy a new ticket
+        </span>
+      </button>
+
       {/* Active ticket card */}
       <div className="bg-navy-900 rounded-[16px] overflow-clip">
         <div className="px-[20px] pt-[20px] pb-[16px]">
@@ -368,7 +379,7 @@ export default function TicketsPage() {
       <TabSwitcher active={activeTab} onSelect={setActiveTab} />
 
       <div className="flex flex-col flex-1 overflow-clip">
-        {activeTab === "my-tickets" && <MyTicketsTab />}
+        {activeTab === "my-tickets" && <MyTicketsTab onBuyTicket={() => setActiveTab("buy")} />}
         {activeTab === "buy" && <BuyTab />}
       </div>
     </div>
