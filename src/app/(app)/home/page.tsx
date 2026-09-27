@@ -1,11 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import TopBar from "@/components/shared/TopBar";
 import LineBadge from "@/components/shared/LineBadge";
 import CrowdBadge from "@/components/shared/CrowdBadge";
 import { SearchIcon, BusIcon } from "@/components/icons";
 import type { Route } from "@/types";
+
+const MumbaiTransitMap = dynamic(
+  () => import("@/components/shared/MumbaiTransitMap"),
+  { ssr: false }
+);
 
 const mockRoutes: Route[] = [
   {
@@ -112,10 +118,10 @@ export default function HomePage() {
     <div className="bg-cream-100 flex flex-col flex-1">
       <TopBar />
 
-      {/* Map placeholder */}
+      {/* Map */}
       <div className="px-[16px] flex-1 min-h-0">
-        <div className="rounded-[16px] overflow-hidden shadow-[0px_2px_16px_0px_rgba(0,0,0,0.18)] bg-[#ddd] h-full min-h-[280px] flex items-center justify-center">
-          <p className="text-text-tertiary text-[14px]">Map · API KEY REQUIRED</p>
+        <div className="rounded-[16px] overflow-hidden shadow-[0px_2px_16px_0px_rgba(0,0,0,0.18)] h-full min-h-[280px]">
+          <MumbaiTransitMap compact />
         </div>
       </div>
 

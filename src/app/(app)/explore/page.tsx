@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { GearIcon, ChevronRightIcon, FromDotIcon, ToDotIcon } from "@/components/icons";
+
+const MumbaiTransitMap = dynamic(
+  () => import("@/components/shared/MumbaiTransitMap"),
+  { ssr: false }
+);
 
 type ExploreTab = "plan" | "network" | "basics";
 type LineFilter = "all" | "western" | "central" | "harbour" | "metro";
@@ -177,9 +183,9 @@ function NetworkTab() {
       </div>
 
       <div className="flex-1 relative px-[16px]">
-        <div className="bg-[#111827] rounded-[16px] overflow-clip h-full min-h-[400px] flex items-center justify-center relative">
-          <p className="text-[#9ca3af] text-[14px]">Network Map Placeholder</p>
-          <div className="absolute bottom-0 left-0 right-0 px-[16px] py-[12px] bg-gradient-to-t from-[rgba(17,24,39,0.95)] from-[60%] to-transparent">
+        <div className="bg-[#111827] rounded-[16px] overflow-clip h-full min-h-[400px] relative">
+          <MumbaiTransitMap activeFilter={activeFilter} dark />
+          <div className="absolute bottom-0 left-0 right-0 z-[1000] px-[16px] py-[12px] bg-gradient-to-t from-[rgba(17,24,39,0.95)] from-[60%] to-transparent">
             <div className="flex flex-wrap gap-x-[16px] gap-y-[4px]">
               {legendItems.map((item) => (
                 <div key={item.label} className="flex gap-[6px] items-center">
