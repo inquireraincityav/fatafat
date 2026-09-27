@@ -2,7 +2,7 @@
   "name": "Fatafat — Mumbai Transit Companion",
   "short_name": "Fatafat",
   "description": "Western · Central · Harbour · BEST",
-  "start_url": "/home",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#1f3a5f",
   "theme_color": "#1f3a5f",
