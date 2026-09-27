@@ -1,134 +1,14 @@
+import Image from "next/image";
+
 export default function AppIcon({ size = 80 }: { size?: number }) {
   return (
-    <svg
+    <Image
+      src="/icons/app-icon.png"
+      alt="Fatafat"
       width={size}
       height={size}
-      viewBox="0 0 512 512"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <rect width="512" height="512" rx="108" fill="#1F3A5F" />
-
-      {/* Birds */}
-      <path d="M220 95 L228 88 L236 95" stroke="#7B9CC0" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M270 80 L280 72 L290 80" stroke="#7B9CC0" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M310 100 L317 94 L324 100" stroke="#7B9CC0" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-
-      {/* Skyline - Bandra-Worli Sea Link (left) */}
-      <path d="M60 260 L60 200 L100 170 L140 200 L140 260" stroke="#5A7FA3" strokeWidth="2" fill="none" />
-      <line x1="100" y1="170" x2="70" y2="240" stroke="#5A7FA3" strokeWidth="1" />
-      <line x1="100" y1="170" x2="80" y2="230" stroke="#5A7FA3" strokeWidth="1" />
-      <line x1="100" y1="170" x2="90" y2="220" stroke="#5A7FA3" strokeWidth="1" />
-      <line x1="100" y1="170" x2="110" y2="220" stroke="#5A7FA3" strokeWidth="1" />
-      <line x1="100" y1="170" x2="120" y2="230" stroke="#5A7FA3" strokeWidth="1" />
-      <line x1="100" y1="170" x2="130" y2="240" stroke="#5A7FA3" strokeWidth="1" />
-
-      {/* Modern buildings (left of center) */}
-      <rect x="145" y="185" width="18" height="75" stroke="#5A7FA3" strokeWidth="1.5" fill="none" />
-      <rect x="148" y="190" width="4" height="4" fill="#5A7FA3" opacity="0.4" />
-      <rect x="155" y="190" width="4" height="4" fill="#5A7FA3" opacity="0.4" />
-      <rect x="148" y="198" width="4" height="4" fill="#5A7FA3" opacity="0.4" />
-      <rect x="155" y="198" width="4" height="4" fill="#5A7FA3" opacity="0.4" />
-      <rect x="148" y="206" width="4" height="4" fill="#5A7FA3" opacity="0.4" />
-      <rect x="155" y="206" width="4" height="4" fill="#5A7FA3" opacity="0.4" />
-
-      <rect x="168" y="195" width="14" height="65" stroke="#5A7FA3" strokeWidth="1.5" fill="none" />
-
-      {/* Gateway of India (center) */}
-      <path d="M210 260 L210 180 L220 175 L230 160 L240 150 L256 140 L272 150 L282 160 L292 175 L302 180 L302 260" stroke="#5A7FA3" strokeWidth="2" fill="none" />
-      <path d="M236 260 L236 200 Q256 185 276 200 L276 260" stroke="#5A7FA3" strokeWidth="1.5" fill="none" />
-      {/* Gateway towers */}
-      <rect x="215" y="170" width="10" height="50" stroke="#5A7FA3" strokeWidth="1.5" fill="none" />
-      <rect x="287" y="170" width="10" height="50" stroke="#5A7FA3" strokeWidth="1.5" fill="none" />
-      {/* Gateway dome details */}
-      <circle cx="220" cy="168" r="5" stroke="#5A7FA3" strokeWidth="1" fill="none" />
-      <circle cx="292" cy="168" r="5" stroke="#5A7FA3" strokeWidth="1" fill="none" />
-
-      {/* CST / Gothic building (right of center) */}
-      <rect x="315" y="175" width="30" height="85" stroke="#5A7FA3" strokeWidth="1.5" fill="none" />
-      <path d="M315 175 L330 145 L345 175" stroke="#5A7FA3" strokeWidth="1.5" fill="none" />
-      <line x1="330" y1="145" x2="330" y2="135" stroke="#5A7FA3" strokeWidth="1.5" />
-      <rect x="320" y="195" width="6" height="10" stroke="#5A7FA3" strokeWidth="1" fill="none" />
-      <rect x="334" y="195" width="6" height="10" stroke="#5A7FA3" strokeWidth="1" fill="none" />
-      <rect x="320" y="215" width="6" height="10" stroke="#5A7FA3" strokeWidth="1" fill="none" />
-      <rect x="334" y="215" width="6" height="10" stroke="#5A7FA3" strokeWidth="1" fill="none" />
-      {/* Spires */}
-      <rect x="350" y="185" width="20" height="75" stroke="#5A7FA3" strokeWidth="1.5" fill="none" />
-      <path d="M350 185 L360 160 L370 185" stroke="#5A7FA3" strokeWidth="1.5" fill="none" />
-
-      {/* Modern building (far right) */}
-      <rect x="378" y="200" width="16" height="60" stroke="#5A7FA3" strokeWidth="1.5" fill="none" />
-      <rect x="381" y="205" width="4" height="4" fill="#5A7FA3" opacity="0.4" />
-      <rect x="387" y="205" width="4" height="4" fill="#5A7FA3" opacity="0.4" />
-
-      {/* Palm trees (far right) */}
-      <line x1="415" y1="260" x2="415" y2="210" stroke="#5A7FA3" strokeWidth="2" />
-      <path d="M415 210 Q425 195 435 205" stroke="#5A7FA3" strokeWidth="1.5" fill="none" />
-      <path d="M415 210 Q405 195 395 205" stroke="#5A7FA3" strokeWidth="1.5" fill="none" />
-      <path d="M415 210 Q420 192 430 198" stroke="#5A7FA3" strokeWidth="1.5" fill="none" />
-      <path d="M415 210 Q410 192 400 198" stroke="#5A7FA3" strokeWidth="1.5" fill="none" />
-      <line x1="440" y1="260" x2="440" y2="220" stroke="#5A7FA3" strokeWidth="1.5" />
-      <path d="M440 220 Q448 210 455 218" stroke="#5A7FA3" strokeWidth="1.2" fill="none" />
-      <path d="M440 220 Q432 210 425 218" stroke="#5A7FA3" strokeWidth="1.2" fill="none" />
-
-      {/* Horizon / water lines */}
-      <line x1="50" y1="262" x2="195" y2="262" stroke="#5A7FA3" strokeWidth="1.5" opacity="0.6" />
-      <line x1="317" y1="262" x2="460" y2="262" stroke="#5A7FA3" strokeWidth="1.5" opacity="0.6" />
-      <line x1="55" y1="268" x2="170" y2="268" stroke="#5A7FA3" strokeWidth="1" opacity="0.3" />
-      <line x1="340" y1="268" x2="450" y2="268" stroke="#5A7FA3" strokeWidth="1" opacity="0.3" />
-
-      {/* Railway tracks (perspective) */}
-      <line x1="200" y1="290" x2="150" y2="470" stroke="#C4973A" strokeWidth="3" opacity="0.6" />
-      <line x1="312" y1="290" x2="362" y2="470" stroke="#C4973A" strokeWidth="3" opacity="0.6" />
-      {/* Track ties */}
-      <line x1="208" y1="310" x2="306" y2="310" stroke="#C4973A" strokeWidth="2" opacity="0.3" />
-      <line x1="198" y1="340" x2="316" y2="340" stroke="#C4973A" strokeWidth="2" opacity="0.3" />
-      <line x1="188" y1="370" x2="326" y2="370" stroke="#C4973A" strokeWidth="2" opacity="0.3" />
-      <line x1="178" y1="400" x2="336" y2="400" stroke="#C4973A" strokeWidth="2" opacity="0.3" />
-      <line x1="168" y1="430" x2="346" y2="430" stroke="#C4973A" strokeWidth="2" opacity="0.25" />
-      <line x1="158" y1="460" x2="356" y2="460" stroke="#C4973A" strokeWidth="2" opacity="0.2" />
-
-      {/* Speed lines (left side) */}
-      <line x1="120" y1="310" x2="170" y2="310" stroke="#5A7FA3" strokeWidth="1.5" opacity="0.3" />
-      <line x1="110" y1="325" x2="160" y2="325" stroke="#5A7FA3" strokeWidth="1.5" opacity="0.25" />
-      <line x1="120" y1="340" x2="155" y2="340" stroke="#5A7FA3" strokeWidth="1.5" opacity="0.2" />
-
-      {/* Speed lines (right side) */}
-      <line x1="345" y1="310" x2="395" y2="310" stroke="#5A7FA3" strokeWidth="1.5" opacity="0.3" />
-      <line x1="355" y1="325" x2="405" y2="325" stroke="#5A7FA3" strokeWidth="1.5" opacity="0.25" />
-      <line x1="360" y1="340" x2="395" y2="340" stroke="#5A7FA3" strokeWidth="1.5" opacity="0.2" />
-
-      {/* Train body - front facing */}
-      <path d="M196 290 Q196 250 220 240 L292 240 Q316 250 316 290 L316 400 Q316 415 300 415 L212 415 Q196 415 196 400 Z" fill="#E8A63C" />
-
-      {/* Train front stripe / bumper */}
-      <path d="M200 380 L312 380 L316 400 Q316 415 300 415 L212 415 Q196 415 196 400 Z" fill="#D4942E" />
-
-      {/* Windshield windows */}
-      <rect x="210" y="290" width="35" height="50" rx="8" fill="#152D4A" />
-      <rect x="267" y="290" width="35" height="50" rx="8" fill="#152D4A" />
-      {/* Window reflections */}
-      <rect x="214" y="294" width="8" height="16" rx="3" fill="#2A4A6B" opacity="0.5" />
-      <rect x="271" y="294" width="8" height="16" rx="3" fill="#2A4A6B" opacity="0.5" />
-
-      {/* Center divider */}
-      <rect x="250" y="285" width="12" height="60" rx="2" fill="#D4942E" />
-
-      {/* Headlights (top) */}
-      <circle cx="222" cy="260" r="8" fill="#FBF7EF" opacity="0.9" />
-      <circle cx="290" cy="260" r="8" fill="#FBF7EF" opacity="0.9" />
-      <circle cx="222" cy="260" r="4" fill="#FFFFFF" />
-      <circle cx="290" cy="260" r="4" fill="#FFFFFF" />
-
-      {/* Lower headlights */}
-      <circle cx="215" cy="365" r="5" fill="#FBF7EF" opacity="0.7" />
-      <circle cx="297" cy="365" r="5" fill="#FBF7EF" opacity="0.7" />
-
-      {/* Front grille / vent */}
-      <rect x="235" y="358" width="42" height="8" rx="4" fill="#152D4A" opacity="0.4" />
-
-      {/* Roof top detail */}
-      <path d="M220 242 Q256 230 292 242" stroke="#D4942E" strokeWidth="3" fill="none" />
-    </svg>
+      className="rounded-[22%]"
+      priority
+    />
   );
 }

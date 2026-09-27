@@ -20,7 +20,7 @@ export default function OnboardingPage() {
               src="/mumbai-skyline.png"
               alt=""
               fill
-              className="object-cover object-bottom opacity-30"
+              className="object-cover object-bottom opacity-50"
               priority
             />
             <div className="absolute inset-0 bg-gradient-to-t from-navy-900/50 to-transparent" />
