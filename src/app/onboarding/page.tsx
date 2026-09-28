@@ -53,7 +53,7 @@ export default function OnboardingPage() {
           </div>
 
           {/* Middle spacer — separates logo from card */}
-          <div className="flex-[3]" />
+          <div className="flex-[1.5]" />
 
           {/* Question Card */}
           <div className="w-full max-w-[338px]">
@@ -77,7 +77,7 @@ export default function OnboardingPage() {
           </div>
 
           {/* Spacer between card and buttons */}
-          <div className="flex-[2]" />
+          <div className="flex-[1]" />
 
           {/* Buttons */}
           <div className="flex flex-col gap-[12px] w-full max-w-[338px]">
@@ -113,7 +113,7 @@ export default function OnboardingPage() {
           </div>
 
           {/* Bottom spacer — keeps buttons off the very bottom */}
-          <div className="flex-[1]" />
+          <div className="flex-[3]" />
         </div>
 
       </div>
