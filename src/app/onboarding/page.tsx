@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import AppIcon from "@/components/shared/AppIcon";
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -20,7 +19,7 @@ export default function OnboardingPage() {
               src="/mumbai-skyline.png"
               alt=""
               fill
-              className="object-cover object-bottom opacity-50"
+              className="object-cover object-bottom opacity-70"
               priority
             />
             <div className="absolute inset-0 bg-gradient-to-t from-navy-900/50 to-transparent" />
@@ -37,7 +36,14 @@ export default function OnboardingPage() {
           {/* Logo + Title */}
           <div className="flex flex-col items-center">
             <div className="pb-[24px]">
-              <AppIcon size={80} />
+              <Image
+                src="/icons/app-icon-onboarding-v3.png"
+                alt="Fatafat"
+                width={80}
+                height={80}
+                priority
+                unoptimized
+              />
             </div>
             <div className="pb-[8px]">
               <h1
