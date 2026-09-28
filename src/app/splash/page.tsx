@@ -10,6 +10,7 @@ export default function SplashPage() {
   const [started, setStarted] = useState(false);
   const [trainPast, setTrainPast] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [isReturning, setIsReturning] = useState(false);
   const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   const clearAll = useCallback(() => {
@@ -23,10 +24,16 @@ export default function SplashPage() {
 
   const skip = useCallback(() => {
     clearAll();
+    try {
+      if (localStorage.getItem("fatafat_user_type")) {
+        router.replace("/home");
+        return;
+      }
+    } catch {}
     setStarted(true);
     setTrainPast(true);
     setShowOnboarding(true);
-  }, [clearAll]);
+  }, [clearAll, router]);
 
   function handleChoice(type: "new" | "regular") {
     try { localStorage.setItem("fatafat_user_type", type); } catch {}
@@ -34,11 +41,20 @@ export default function SplashPage() {
   }
 
   useEffect(() => {
+    let returning = false;
+    try { returning = !!localStorage.getItem("fatafat_user_type"); } catch {}
+    setIsReturning(returning);
+
     sched(() => setStarted(true), 50);
     sched(() => setTrainPast(true), 2400);
-    sched(() => setShowOnboarding(true), 2800);
+
+    if (returning) {
+      sched(() => router.replace("/home"), 3200);
+    } else {
+      sched(() => setShowOnboarding(true), 2800);
+    }
     return () => clearAll();
-  }, [clearAll]);
+  }, [clearAll, router]);
 
   return (
     <div
