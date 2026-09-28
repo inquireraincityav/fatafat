@@ -36,7 +36,7 @@ export default function MumbaiTrainSideSVG({ className }: { className?: string }
           fontWeight="600"
           letterSpacing="0.4"
         >
-          CHURCHGATE
+          MUMBAI LOCAL
         </text>
 
         {/* Windows — row of rectangular windows */}

@@ -73,7 +73,7 @@ export default function MumbaiTrainSVG({ className }: { className?: string }) {
           fontWeight="600"
           letterSpacing="0.5"
         >
-          CHURCHGATE FAST
+          MUMBAI LOCAL
         </text>
 
         {/* Two large front windows */}

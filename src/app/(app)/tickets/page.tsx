@@ -72,7 +72,7 @@ const qrPattern = [
 ];
 
 function TicketQRCode() {
-  const cellSize = 5;
+  const cellSize = 6;
   const size = 21 * cellSize;
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} xmlns="http://www.w3.org/2000/svg">
@@ -118,7 +118,7 @@ function TabSwitcher({ active, onSelect }: { active: TicketsTab; onSelect: (tab:
 
 function ActiveTicketCard({ ticket, onScan }: { ticket: Ticket; onScan: (id: string) => void }) {
   return (
-    <div className="bg-navy-900 rounded-[16px] overflow-clip min-w-[300px] max-w-[340px] w-[85vw] shrink-0 snap-center">
+    <div className="bg-navy-900 rounded-[16px] overflow-clip w-full max-w-[340px] mx-auto shrink-0 snap-center">
       <div className="px-[20px] pt-[20px] pb-[16px]">
         <div className="flex items-start justify-between">
           <div className="flex flex-col">
@@ -145,8 +145,11 @@ function ActiveTicketCard({ ticket, onScan }: { ticket: Ticket; onScan: (id: str
           </div>
         </div>
 
-        <div className="bg-cream-50 rounded-[12px] flex items-center justify-center h-[148px] mt-[12px]">
+        <div className="bg-cream-50 rounded-[12px] flex flex-col items-center justify-center py-[16px] mt-[12px]">
           <TicketQRCode />
+          <p className="text-[11px] leading-[16px] text-text-muted pt-[8px]">
+            Show to ticket checker (TC)
+          </p>
         </div>
 
         <p className="text-[12px] leading-[16px] text-[#5a7090] text-center pt-[8px]">
@@ -263,8 +266,8 @@ function MyTicketsTab({
           </div>
           <div
             ref={scrollRef}
-            className="flex gap-[12px] overflow-x-auto px-[16px] pb-[4px] snap-x snap-mandatory scrollbar-hide"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            className={`pb-[4px] ${activeTickets.length > 1 ? "flex gap-[12px] overflow-x-auto px-[16px] snap-x snap-mandatory scrollbar-hide" : "px-[16px]"}`}
+            style={activeTickets.length > 1 ? { scrollbarWidth: "none", msOverflowStyle: "none" } : undefined}
           >
             {activeTickets.map((ticket) => (
               <ActiveTicketCard key={ticket.id} ticket={ticket} onScan={onScan} />
