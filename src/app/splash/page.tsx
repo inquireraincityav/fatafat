@@ -10,7 +10,6 @@ export default function SplashPage() {
   const [started, setStarted] = useState(false);
   const [trainPast, setTrainPast] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
-  const skipRef = useRef(false);
   const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   const clearAll = useCallback(() => {
@@ -23,29 +22,33 @@ export default function SplashPage() {
   }
 
   const skip = useCallback(() => {
-    if (skipRef.current) return;
-    skipRef.current = true;
     clearAll();
-    router.replace("/onboarding");
-  }, [clearAll, router]);
+    setStarted(true);
+    setTrainPast(true);
+    setShowOnboarding(true);
+  }, [clearAll]);
+
+  function handleChoice(type: "new" | "regular") {
+    try { localStorage.setItem("fatafat_user_type", type); } catch {}
+    router.push(type === "new" ? "/walkthrough" : "/home");
+  }
 
   useEffect(() => {
     sched(() => setStarted(true), 50);
     sched(() => setTrainPast(true), 2400);
     sched(() => setShowOnboarding(true), 2800);
-    sched(() => {
-      if (!skipRef.current) router.replace("/onboarding");
-    }, 5000);
     return () => clearAll();
-  }, [clearAll, router]);
+  }, [clearAll]);
 
   return (
     <div
       className="fixed inset-0 flex justify-center bg-navy-900"
-      onClick={skip}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") skip(); }}
+      {...(!showOnboarding ? {
+        onClick: skip,
+        role: "button" as const,
+        tabIndex: 0,
+        onKeyDown: (e: React.KeyboardEvent) => { if (e.key === "Enter" || e.key === " ") skip(); },
+      } : {})}
     >
       <div
         className="w-full max-w-[402px] relative overflow-hidden"
@@ -76,7 +79,6 @@ export default function SplashPage() {
         </div>
 
         {/* ─── TRAIN ─── */}
-        {/* Approaches from distance, passes through toward the viewer, flies past */}
         <div
           className="absolute z-10 left-1/2"
           style={{
@@ -103,7 +105,7 @@ export default function SplashPage() {
           <MumbaiTrainSVG className="w-full h-auto" />
         </div>
 
-        {/* Headlight glow — visible while train is approaching */}
+        {/* Headlight glow */}
         <div
           className="absolute left-1/2 pointer-events-none z-[5]"
           style={{
@@ -127,7 +129,7 @@ export default function SplashPage() {
           style={{
             paddingTop: "env(safe-area-inset-top, 0px)",
             paddingBottom: "env(safe-area-inset-bottom, 0px)",
-            pointerEvents: "none",
+            pointerEvents: showOnboarding ? "auto" : "none",
           }}
         >
           <div className="flex-[2]" />
@@ -208,22 +210,28 @@ export default function SplashPage() {
                 : "none",
             }}
           >
-            <div className="bg-amber-500 rounded-[16px] px-[20px] py-[16px] text-left w-full">
+            <button
+              onClick={() => handleChoice("new")}
+              className="bg-amber-500 rounded-[16px] px-[20px] py-[16px] text-left w-full active:scale-[0.98] transition-transform duration-150"
+            >
               <p className="font-semibold text-[16px] leading-[24px] text-text-primary">
                 I&apos;m new here
               </p>
               <p className="text-[12px] leading-[16px] text-[rgba(31,58,95,0.65)] pt-[2px]">
                 Take a quick walkthrough of the app
               </p>
-            </div>
-            <div className="border-[1.119px] border-[rgba(248,240,228,0.25)] rounded-[16px] px-[20px] py-[16px] text-left w-full backdrop-blur-sm">
+            </button>
+            <button
+              onClick={() => handleChoice("regular")}
+              className="border-[1.119px] border-[rgba(248,240,228,0.25)] rounded-[16px] px-[20px] py-[16px] text-left w-full backdrop-blur-sm active:scale-[0.98] transition-transform duration-150"
+            >
               <p className="font-semibold text-[16px] leading-[24px] text-text-on-dark">
                 I ride daily
               </p>
               <p className="text-[12px] leading-[16px] text-text-placeholder pt-[2px]">
                 Skip the intro, let&apos;s go
               </p>
-            </div>
+            </button>
           </div>
 
           <div className="flex-[3]" />
@@ -235,6 +243,7 @@ export default function SplashPage() {
           style={{
             opacity: started && !showOnboarding ? 0.5 : 0,
             transition: "opacity 500ms ease-in-out",
+            pointerEvents: "none",
           }}
         >
           <p className="text-[12px] text-text-placeholder tracking-wider">
