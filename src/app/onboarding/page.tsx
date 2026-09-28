@@ -8,9 +8,7 @@ export default function OnboardingPage() {
   const router = useRouter();
 
   return (
-    <div className="fixed inset-0 flex justify-center bg-navy-900"
-      style={{ height: "100dvh" }}
-    >
+    <div className="fixed inset-0 flex justify-center bg-navy-900">
       <div className="w-full max-w-[402px] flex flex-col overflow-hidden relative">
       <div className="flex flex-col items-center justify-center px-[32px] flex-1 relative"
         style={{ paddingTop: "env(safe-area-inset-top, 0px)", paddingBottom: "env(safe-area-inset-bottom, 0px)" }}

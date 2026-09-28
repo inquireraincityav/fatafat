@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "black-translucent",
+    statusBarStyle: "default",
     title: "Fatafat",
   },
   icons: {
@@ -49,7 +49,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${fraunces.variable}`}>
-      <body className="min-h-dvh flex flex-col font-[family-name:var(--font-body)]">
+      <body className="h-full flex flex-col font-[family-name:var(--font-body)]">
         {children}
       </body>
     </html>
