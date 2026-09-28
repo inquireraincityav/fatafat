@@ -10,7 +10,7 @@ export default function OnboardingPage() {
   return (
     <div className="fixed inset-0 flex justify-center bg-navy-900">
       <div className="w-full max-w-[402px] flex flex-col overflow-hidden relative">
-      <div className="flex flex-col items-center justify-center px-[32px] flex-1 relative"
+      <div className="flex flex-col items-center px-[32px] flex-1 relative overflow-y-auto"
         style={{ paddingTop: "env(safe-area-inset-top, 0px)", paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
       >
         {/* Background skyline image */}
@@ -28,9 +28,14 @@ export default function OnboardingPage() {
         </div>
 
         {/* Content above background */}
-        <div className="relative z-10 flex flex-col items-center w-full">
+        <div className="relative z-10 flex flex-col items-center w-full min-h-full"
+          style={{ minHeight: "100%" }}
+        >
+          {/* Top spacer — pushes content down from top */}
+          <div className="flex-[2]" />
+
           {/* Logo + Title */}
-          <div className="flex flex-col items-center pb-[40px]">
+          <div className="flex flex-col items-center">
             <div className="pb-[24px]">
               <AppIcon size={80} />
             </div>
@@ -47,8 +52,11 @@ export default function OnboardingPage() {
             </p>
           </div>
 
+          {/* Middle spacer — separates logo from card */}
+          <div className="flex-[3]" />
+
           {/* Question Card */}
-          <div className="pb-[28px] w-full max-w-[338px]">
+          <div className="w-full max-w-[338px]">
             <div className="bg-[rgba(251,247,239,0.06)] border-[1.119px] border-[rgba(251,247,239,0.1)] rounded-[24px] px-[24px] py-[20px] backdrop-blur-sm">
               <div className="flex flex-col items-center">
                 <h2
@@ -67,6 +75,9 @@ export default function OnboardingPage() {
               </div>
             </div>
           </div>
+
+          {/* Spacer between card and buttons */}
+          <div className="flex-[2]" />
 
           {/* Buttons */}
           <div className="flex flex-col gap-[12px] w-full max-w-[338px]">
@@ -100,6 +111,9 @@ export default function OnboardingPage() {
               </p>
             </button>
           </div>
+
+          {/* Bottom spacer — keeps buttons off the very bottom */}
+          <div className="flex-[1]" />
         </div>
 
       </div>

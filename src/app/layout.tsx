@@ -26,10 +26,10 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/icons/favicon.svg", type: "image/svg+xml" },
-      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/favicon-v3.ico", type: "image/x-icon" },
+      { url: "/icons/icon-192-v3.png", sizes: "192x192", type: "image/png" },
     ],
-    apple: "/icons/icon-512.png",
+    apple: "/icons/icon-512-v3.png",
   },
 };
 
