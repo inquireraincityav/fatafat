@@ -95,6 +95,10 @@ function findStation(name: string) {
   );
 }
 
+function findStationById(id: string) {
+  return allStations.find((s) => s.id === id);
+}
+
 function findSharedLine(a: StationDef, b: StationDef): LineName | null {
   for (const line of a.lines) {
     if (b.lines.includes(line)) return line;
@@ -117,79 +121,188 @@ function getStationsBetween(
   return fromIdx < toIdx ? slice : [...slice].reverse();
 }
 
+interface InterchangeDef {
+  name: string;
+  line1: LineName;
+  line2: LineName;
+  stId1: string;
+  stId2: string;
+}
+
+const INTERCHANGES: InterchangeDef[] = [
+  { name: "Dadar", line1: "western", line2: "central", stId1: "dadar", stId2: "dadar-central" },
+  { name: "CSMT", line1: "central", line2: "harbour", stId1: "csmt", stId2: "csmt" },
+  { name: "Bandra", line1: "western", line2: "harbour", stId1: "bandra", stId2: "bandra" },
+  { name: "Andheri", line1: "western", line2: "harbour", stId1: "andheri", stId2: "andheri" },
+  { name: "Kurla", line1: "central", line2: "harbour", stId1: "kurla", stId2: "kurla" },
+];
+
+const TRANSFER_WALK_MIN = 5;
+
+interface StationStop {
+  name: string;
+  time: string;
+  status: string;
+  line?: LineName;
+}
+
+interface TransferResult {
+  interchange: string;
+  line1: LineName;
+  line2: LineName;
+  leg1: StationDef[];
+  leg2: StationDef[];
+  dist: number;
+}
+
+function findTransferRoute(fromSt: StationDef, toSt: StationDef): TransferResult | null {
+  let best: TransferResult | null = null;
+
+  for (const ix of INTERCHANGES) {
+    const ixSt1 = findStationById(ix.stId1);
+    const ixSt2 = findStationById(ix.stId2);
+    if (!ixSt1 || !ixSt2) continue;
+
+    const tryRoute = (
+      fromLine: LineName, toLine: LineName,
+      ixFrom: StationDef, ixTo: StationDef,
+    ) => {
+      if (!fromSt.lines.includes(fromLine) || !toSt.lines.includes(toLine)) return;
+      if (fromSt.id === ixFrom.id || toSt.id === ixTo.id) return;
+      const leg1 = getStationsBetween(fromSt, ixFrom, fromLine);
+      const leg2 = getStationsBetween(ixTo, toSt, toLine);
+      const dist =
+        Math.abs(fromSt.kmFromStart - ixFrom.kmFromStart) +
+        Math.abs(ixTo.kmFromStart - toSt.kmFromStart);
+      if (!best || dist < best.dist) {
+        best = { interchange: ix.name, line1: fromLine, line2: toLine, leg1, leg2, dist };
+      }
+    };
+
+    tryRoute(ix.line1, ix.line2, ixSt1, ixSt2);
+    tryRoute(ix.line2, ix.line1, ixSt2, ixSt1);
+  }
+
+  return best;
+}
+
 function buildRouteData(fromName: string, toName: string) {
   const fromSt = findStation(fromName);
   const toSt = findStation(toName);
   if (!fromSt || !toSt) return null;
 
-  const line = findSharedLine(fromSt, toSt);
-  if (!line) return null;
-
-  const stationsBetween = getStationsBetween(fromSt, toSt, line);
-  const distKm = Math.abs(fromSt.kmFromStart - toSt.kmFromStart);
-  const fastStops = stationsBetween.filter(
-    (_, i) => i === 0 || i === stationsBetween.length - 1 || distKm > 10
-  );
-
-  const fastDuration = Math.round(distKm * 2.0);
-  const slowDuration = Math.round(distKm * 2.8);
-
   const now = new Date();
   const baseHour = now.getHours();
   const baseMin = now.getMinutes();
 
-  function buildTimes(stations: StationDef[], totalMin: number) {
+  function buildTimes(stations: StationDef[], totalMin: number, startOffset: number, line: LineName): StationStop[] {
     return stations.map((s, i) => {
       const offset =
-        i === 0 ? 2 : Math.round((i / (stations.length - 1)) * totalMin) + 2;
+        i === 0 ? startOffset : Math.round((i / (stations.length - 1)) * totalMin) + startOffset;
       const m = baseMin + offset;
       const h = baseHour + Math.floor(m / 60);
-      const mm = m % 60;
+      const mm = ((m % 60) + 60) % 60;
       return {
         name: s.name,
-        time: `${h % 24}:${mm.toString().padStart(2, "0")}`,
+        time: `${((h % 24) + 24) % 24}:${mm.toString().padStart(2, "0")}`,
         status: i === 0 ? "departure" : i === stations.length - 1 ? "arrival" : "stop",
+        line,
       };
     });
   }
 
-  const fastSkipped =
-    stationsBetween.length > 4
-      ? [
-          stationsBetween[0],
-          ...stationsBetween.filter(
-            (_, i) =>
-              i > 0 &&
-              i < stationsBetween.length - 1 &&
-              i % Math.max(2, Math.floor(stationsBetween.length / 5)) === 0
-          ),
-          stationsBetween[stationsBetween.length - 1],
-        ]
-      : stationsBetween;
+  const line = findSharedLine(fromSt, toSt);
+  if (line) {
+    const stationsBetween = getStationsBetween(fromSt, toSt, line);
+    const distKm = Math.abs(fromSt.kmFromStart - toSt.kmFromStart);
+
+    const fastDuration = Math.round(distKm * 2.0);
+    const slowDuration = Math.round(distKm * 2.8);
+
+    const fastSkipped =
+      stationsBetween.length > 4
+        ? [
+            stationsBetween[0],
+            ...stationsBetween.filter(
+              (_, i) =>
+                i > 0 &&
+                i < stationsBetween.length - 1 &&
+                i % Math.max(2, Math.floor(stationsBetween.length / 5)) === 0
+            ),
+            stationsBetween[stationsBetween.length - 1],
+          ]
+        : stationsBetween;
+
+    return {
+      fromName,
+      toName,
+      line,
+      distKm: Math.round(distKm * 10) / 10,
+      transfer: null as null,
+      routes: [
+        {
+          line,
+          speed: "Fast" as const,
+          duration: `${fastDuration} min`,
+          nextTrain: `${2 + (baseMin % 3)} min`,
+          stops: fastSkipped.length,
+          crowdLevel: "moderate" as const,
+          stations: buildTimes(fastSkipped, fastDuration, 2, line),
+        },
+        {
+          line,
+          speed: "Slow" as const,
+          duration: `${slowDuration} min`,
+          nextTrain: `${5 + (baseMin % 4)} min`,
+          stops: stationsBetween.length,
+          crowdLevel: "light" as const,
+          stations: buildTimes(stationsBetween, slowDuration, 2, line),
+        },
+      ],
+    };
+  }
+
+  const transfer = findTransferRoute(fromSt, toSt);
+  if (!transfer) return null;
+
+  const totalDist = transfer.dist;
+  const leg1Duration = Math.round(
+    Math.abs(fromSt.kmFromStart - transfer.leg1[transfer.leg1.length - 1].kmFromStart) * 2.8
+  );
+  const leg2Duration = Math.round(
+    Math.abs(transfer.leg2[0].kmFromStart - toSt.kmFromStart) * 2.8
+  );
+  const totalDuration = leg1Duration + TRANSFER_WALK_MIN + leg2Duration;
+
+  const leg1Times = buildTimes(transfer.leg1, leg1Duration, 2, transfer.line1);
+  const leg2StartOffset = 2 + leg1Duration + TRANSFER_WALK_MIN;
+  const leg2Times = buildTimes(transfer.leg2, leg2Duration, leg2StartOffset, transfer.line2);
+
+  leg1Times[leg1Times.length - 1].status = "transfer";
+  leg2Times[0].status = "transfer-board";
+
+  const combinedStations = [...leg1Times, ...leg2Times];
+  combinedStations[combinedStations.length - 1].status = "arrival";
 
   return {
     fromName,
     toName,
-    line,
-    distKm: Math.round(distKm * 10) / 10,
+    line: transfer.line1,
+    distKm: Math.round(totalDist * 10) / 10,
+    transfer: {
+      interchange: transfer.interchange,
+      line1: transfer.line1,
+      line2: transfer.line2,
+    },
     routes: [
       {
-        line,
-        speed: "Fast" as const,
-        duration: `${fastDuration} min`,
-        nextTrain: `${2 + (baseMin % 3)} min`,
-        stops: fastSkipped.length,
-        crowdLevel: "moderate" as const,
-        stations: buildTimes(fastSkipped, fastDuration),
-      },
-      {
-        line,
+        line: transfer.line1,
         speed: "Slow" as const,
-        duration: `${slowDuration} min`,
-        nextTrain: `${5 + (baseMin % 4)} min`,
-        stops: stationsBetween.length,
-        crowdLevel: "light" as const,
-        stations: buildTimes(stationsBetween, slowDuration),
+        duration: `${totalDuration} min`,
+        nextTrain: `${2 + (baseMin % 3)} min`,
+        stops: transfer.leg1.length + transfer.leg2.length,
+        crowdLevel: "moderate" as const,
+        stations: combinedStations,
       },
     ],
   };
@@ -228,7 +341,7 @@ function JourneyContent() {
       <MobileShell>
         <div className="bg-cream-100 flex flex-col flex-1 items-center justify-center px-[32px]">
           <p className="text-text-muted text-center">
-            No direct route found between {fromParam} and {toParam}.
+            No route found between {fromParam} and {toParam}.
           </p>
           <button
             onClick={() => router.back()}
@@ -256,11 +369,24 @@ function JourneyContent() {
               className="font-[family-name:var(--font-heading)] font-semibold text-[20px] leading-[28px] text-navy-900 truncate"
               style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
             >
-              {routeData.fromName} → {routeData.toName}
+              {routeData.fromName} to {routeData.toName}
             </h1>
-            <p className="text-[12px] leading-[16px] text-text-muted">
-              {routeData.line.charAt(0).toUpperCase() + routeData.line.slice(1)} Line · {routeData.distKm} km
-            </p>
+            <div className="flex items-center gap-[6px]">
+              {routeData.transfer ? (
+                <>
+                  <p className="text-[12px] leading-[16px] text-text-muted">
+                    {routeData.transfer.line1.charAt(0).toUpperCase() + routeData.transfer.line1.slice(1)} + {routeData.transfer.line2.charAt(0).toUpperCase() + routeData.transfer.line2.slice(1)} · {routeData.distKm} km
+                  </p>
+                  <span className="bg-amber-500 text-navy-900 text-[10px] font-semibold leading-[14px] px-[6px] py-[1px] rounded-full">
+                    1 change
+                  </span>
+                </>
+              ) : (
+                <p className="text-[12px] leading-[16px] text-text-muted">
+                  {routeData.line.charAt(0).toUpperCase() + routeData.line.slice(1)} Line · {routeData.distKm} km
+                </p>
+              )}
+            </div>
           </div>
         </div>
 
@@ -311,13 +437,23 @@ function JourneyContent() {
                 </span>
               </div>
               <div className="flex items-center gap-[6px]">
-                <LineBadge line={route.line} />
+                {routeData.transfer ? (
+                  <>
+                    <LineBadge line={routeData.transfer.line1} />
+                    <LineBadge line={routeData.transfer.line2} />
+                  </>
+                ) : (
+                  <LineBadge line={route.line} />
+                )}
                 <CrowdBadge level={route.crowdLevel} />
               </div>
             </div>
             <div className="flex items-center gap-[8px] pt-[8px]">
               <span className="text-[12px] leading-[16px] text-text-muted">
-                Platform {selectedRoute === 0 ? 2 : 3} · {route.speed} train · Arrives {route.stations[route.stations.length - 1].time}
+                {routeData.transfer
+                  ? `1 change at ${routeData.transfer.interchange} · Arrives ${route.stations[route.stations.length - 1].time}`
+                  : `Platform ${selectedRoute === 0 ? 2 : 3} · ${route.speed} train · Arrives ${route.stations[route.stations.length - 1].time}`
+                }
               </span>
             </div>
           </div>
@@ -341,65 +477,117 @@ function JourneyContent() {
             {route.stations.map((station, i) => {
               const isFirst = i === 0;
               const isLast = i === route.stations.length - 1;
-              const showStation = expanded || isFirst || isLast || i === 1 || i === route.stations.length - 2;
+              const isTransfer = station.status === "transfer";
+              const isTransferBoard = station.status === "transfer-board";
+              const showStation = expanded || isFirst || isLast || isTransfer || isTransferBoard || i === 1 || i === route.stations.length - 2;
 
               if (!showStation && !expanded) {
-                if (i === 2) {
-                  return (
-                    <button
-                      key="collapsed"
-                      onClick={() => setExpanded(true)}
-                      className="flex items-center gap-[12px] py-[8px] pl-[4px]"
-                    >
-                      <div className="w-[16px] flex flex-col items-center">
-                        <div className="w-[2px] h-[4px] bg-border-light" />
-                        <div className="w-[4px] h-[4px] rounded-full bg-border-light" />
-                        <div className="w-[2px] h-[4px] bg-border-light" />
-                        <div className="w-[4px] h-[4px] rounded-full bg-border-light" />
-                        <div className="w-[2px] h-[4px] bg-border-light" />
-                      </div>
-                      <span className="text-[12px] leading-[16px] text-text-muted">
-                        {route.stations.length - 4} more stops
-                      </span>
-                    </button>
-                  );
+                const prevTransfer = route.stations.slice(0, i).some((s) => s.status === "transfer" || s.status === "transfer-board");
+                const nextTransfer = route.stations.slice(i + 1).some((s) => s.status === "transfer" || s.status === "transfer-board");
+                const isFirstCollapsed = (() => {
+                  for (let j = i - 1; j >= 0; j--) {
+                    const ps = route.stations[j];
+                    if (ps.status === "departure" || ps.status === "transfer-board") return true;
+                    if (ps.status !== "stop") return true;
+                    return false;
+                  }
+                  return true;
+                })();
+
+                if (isFirstCollapsed) {
+                  const collapsedCount = (() => {
+                    let count = 0;
+                    for (let j = i; j < route.stations.length; j++) {
+                      const s = route.stations[j];
+                      if (s.status === "transfer" || s.status === "transfer-board" || s.status === "arrival" || j === route.stations.length - 2) break;
+                      if (s.status === "stop") count++;
+                    }
+                    return count;
+                  })();
+                  if (collapsedCount > 0) {
+                    return (
+                      <button
+                        key={`collapsed-${i}`}
+                        onClick={() => setExpanded(true)}
+                        className="flex items-center gap-[12px] py-[8px] pl-[4px]"
+                      >
+                        <div className="w-[16px] flex flex-col items-center">
+                          <div className="w-[2px] h-[4px] bg-border-light" />
+                          <div className="w-[4px] h-[4px] rounded-full bg-border-light" />
+                          <div className="w-[2px] h-[4px] bg-border-light" />
+                          <div className="w-[4px] h-[4px] rounded-full bg-border-light" />
+                          <div className="w-[2px] h-[4px] bg-border-light" />
+                        </div>
+                        <span className="text-[12px] leading-[16px] text-text-muted">
+                          {collapsedCount} more stops
+                        </span>
+                      </button>
+                    );
+                  }
                 }
-                if (i > 2 && i < route.stations.length - 2) return null;
+                return null;
               }
 
+              if (isTransferBoard) return null;
+
+              const lineColor = station.line === "western" ? "#1b3a6b" : station.line === "central" ? "#c0392b" : "#27ae60";
+
               return (
-                <div key={station.name} className="flex items-start gap-[12px] pl-[4px]">
-                  <div className="w-[16px] flex flex-col items-center pt-[2px]">
-                    {!isFirst && (
-                      <div className={`w-[2px] h-[12px] ${isLast ? "bg-[#c0392b]" : "bg-border-light"}`} />
-                    )}
-                    <div
-                      className={`w-[10px] h-[10px] rounded-full border-[2px] ${
-                        isFirst
-                          ? "border-amber-500 bg-amber-500"
-                          : isLast
-                            ? "border-[#c0392b] bg-[#c0392b]"
-                            : "border-border-light bg-cream-100"
-                      }`}
-                    />
-                    {!isLast && (
-                      <div className="w-[2px] h-[12px] bg-border-light" />
-                    )}
+                <div key={`${station.name}-${i}`}>
+                  <div className="flex items-start gap-[12px] pl-[4px]">
+                    <div className="w-[16px] flex flex-col items-center pt-[2px]">
+                      {!isFirst && (
+                        <div
+                          className={`w-[2px] h-[12px] ${isLast ? "" : "bg-border-light"}`}
+                          style={isLast ? { backgroundColor: lineColor } : undefined}
+                        />
+                      )}
+                      <div
+                        className={`w-[10px] h-[10px] rounded-full border-[2px] ${
+                          isFirst
+                            ? "border-amber-500 bg-amber-500"
+                            : isLast
+                              ? ""
+                              : isTransfer
+                                ? "border-amber-500 bg-cream-100"
+                                : "border-border-light bg-cream-100"
+                        }`}
+                        style={isLast ? { borderColor: lineColor, backgroundColor: lineColor } : undefined}
+                      />
+                      {!isLast && !isTransfer && (
+                        <div className="w-[2px] h-[12px] bg-border-light" />
+                      )}
+                    </div>
+                    <div className="flex-1 flex items-center justify-between pb-[4px] pt-[1px]">
+                      <span
+                        className={`text-[14px] leading-[20px] ${
+                          isFirst || isLast || isTransfer
+                            ? "font-semibold text-navy-900"
+                            : "text-text-primary"
+                        }`}
+                      >
+                        {station.name}
+                      </span>
+                      <span className="text-[12px] leading-[16px] text-text-muted">
+                        {station.time}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex-1 flex items-center justify-between pb-[4px] pt-[1px]">
-                    <span
-                      className={`text-[14px] leading-[20px] ${
-                        isFirst || isLast
-                          ? "font-semibold text-navy-900"
-                          : "text-text-primary"
-                      }`}
-                    >
-                      {station.name}
-                    </span>
-                    <span className="text-[12px] leading-[16px] text-text-muted">
-                      {station.time}
-                    </span>
-                  </div>
+
+                  {isTransfer && routeData.transfer && (
+                    <div className="flex items-start gap-[12px] pl-[4px] py-[4px]">
+                      <div className="w-[16px] flex flex-col items-center">
+                        <div className="w-[2px] h-[6px] bg-border-light" style={{ opacity: 0.4 }} />
+                        <div className="w-[2px] h-[6px] bg-border-light" style={{ opacity: 0.4 }} />
+                      </div>
+                      <div className="flex-1 flex items-center gap-[6px] bg-[rgba(232,166,60,0.1)] border-[1px] border-[rgba(232,166,60,0.25)] rounded-[8px] px-[10px] py-[6px]">
+                        <span className="text-[11px] text-amber-500">&#8595;</span>
+                        <span className="text-[12px] leading-[16px] text-[#8b6a10] font-medium">
+                          Change to {routeData.transfer.line2.charAt(0).toUpperCase() + routeData.transfer.line2.slice(1)} Line · ~{TRANSFER_WALK_MIN} min
+                        </span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -413,7 +601,7 @@ function JourneyContent() {
             className="bg-amber-500 rounded-[16px] py-[14px] flex-1 flex items-center justify-center"
           >
             <span className="font-semibold text-[14px] leading-[20px] text-navy-900 text-center">
-              Buy ticket →
+              Buy ticket
             </span>
           </Link>
           <Link

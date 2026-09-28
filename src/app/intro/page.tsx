@@ -100,7 +100,7 @@ export default function IntroPage() {
             className="bg-amber-500 rounded-[16px] py-[16px] flex-1 flex items-center justify-center"
           >
             <span className="font-semibold text-[16px] leading-[24px] text-navy-900 text-center">
-              {isLast ? "Start riding →" : "Next →"}
+              {isLast ? "Start riding" : "Next"}
             </span>
           </button>
         </div>
