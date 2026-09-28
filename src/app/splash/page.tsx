@@ -4,11 +4,11 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import MumbaiTrainSVG from "@/components/splash/MumbaiTrainSVG";
-import MumbaiTrainSideSVG from "@/components/splash/MumbaiTrainSideSVG";
 
 export default function SplashPage() {
   const router = useRouter();
   const [started, setStarted] = useState(false);
+  const [trainPast, setTrainPast] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const skipRef = useRef(false);
   const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
@@ -31,11 +31,11 @@ export default function SplashPage() {
 
   useEffect(() => {
     sched(() => setStarted(true), 50);
-    // Train animation: approach 0-1.5s, hold 1.5-2.2s, turn+exit 2.2-4s
-    // Show onboarding at 3.5s (overlaps with train exiting)
-    sched(() => setShowOnboarding(true), 3500);
-    // Navigate at 5.5s
-    sched(() => { if (!skipRef.current) router.replace("/onboarding"); }, 5500);
+    sched(() => setTrainPast(true), 2400);
+    sched(() => setShowOnboarding(true), 2800);
+    sched(() => {
+      if (!skipRef.current) router.replace("/onboarding");
+    }, 5000);
     return () => clearAll();
   }, [clearAll, router]);
 
@@ -76,43 +76,49 @@ export default function SplashPage() {
         </div>
 
         {/* ─── TRAIN ─── */}
-        {/* Single container with keyframe animation for smooth continuous motion */}
+        {/* Approaches from distance, passes through toward the viewer, flies past */}
         <div
-          className="absolute z-10"
+          className="absolute z-10 left-1/2"
           style={{
-            top: "14%",
-            left: "50%",
+            top: "15%",
             width: 220,
+            transform: trainPast
+              ? "translateX(-50%) scale(4) translateY(-20%)"
+              : started
+                ? "translateX(-50%) scale(1) translateY(0)"
+                : "translateX(-50%) scale(0.08) translateY(60px)",
+            opacity: trainPast
+              ? 0
+              : started
+                ? 1
+                : 0.05,
+            transition: trainPast
+              ? "transform 800ms cubic-bezier(0.3, 0, 1, 0.5), opacity 600ms ease-in"
+              : started
+                ? "transform 2200ms cubic-bezier(0.25, 1, 0.5, 1), opacity 600ms ease-out"
+                : "none",
             transformOrigin: "center center",
-            animation: started
-              ? "train-journey 4s cubic-bezier(0.25, 0.1, 0.25, 1) forwards"
+          }}
+        >
+          <MumbaiTrainSVG className="w-full h-auto" />
+        </div>
+
+        {/* Headlight glow — visible while train is approaching */}
+        <div
+          className="absolute left-1/2 pointer-events-none z-[5]"
+          style={{
+            top: "52%",
+            transform: "translateX(-50%)",
+            opacity: started && !trainPast ? 0.35 : 0,
+            transition: started
+              ? "opacity 600ms ease-in-out"
               : "none",
           }}
         >
-          {/* Front view — fades out at rotation midpoint */}
-          <div
-            style={{
-              animation: started
-                ? "front-view 4s ease forwards"
-                : "none",
-              transformOrigin: "center center",
-            }}
-          >
-            <MumbaiTrainSVG className="w-full h-auto" />
-          </div>
-
-          {/* Side view — fades in at rotation midpoint, wider */}
-          <div
-            className="absolute top-0 left-[-40%] w-[180%]"
-            style={{
-              animation: started
-                ? "side-view 4s ease forwards"
-                : "none",
-              transformOrigin: "center center",
-            }}
-          >
-            <MumbaiTrainSideSVG className="w-full h-auto" />
-          </div>
+          <div style={{
+            width: 140, height: 160,
+            background: "radial-gradient(ellipse at center top, rgba(255,251,230,0.25) 0%, rgba(255,251,230,0.05) 50%, transparent 75%)",
+          }} />
         </div>
 
         {/* ─── ONBOARDING CONTENT ─── */}
@@ -132,7 +138,7 @@ export default function SplashPage() {
               transform: showOnboarding ? "translateY(0)" : "translateY(50px)",
               opacity: showOnboarding ? 1 : 0,
               transition: showOnboarding
-                ? "transform 1200ms cubic-bezier(0.16, 1, 0.3, 1) 200ms, opacity 1000ms ease-out 200ms"
+                ? "transform 1100ms cubic-bezier(0.16, 1, 0.3, 1) 100ms, opacity 900ms ease-out 100ms"
                 : "none",
             }}
           >
@@ -167,7 +173,7 @@ export default function SplashPage() {
               transform: showOnboarding ? "translateY(0)" : "translateY(60px)",
               opacity: showOnboarding ? 1 : 0,
               transition: showOnboarding
-                ? "transform 1200ms cubic-bezier(0.16, 1, 0.3, 1) 450ms, opacity 1000ms ease-out 450ms"
+                ? "transform 1100ms cubic-bezier(0.16, 1, 0.3, 1) 300ms, opacity 900ms ease-out 300ms"
                 : "none",
             }}
           >
@@ -198,7 +204,7 @@ export default function SplashPage() {
               transform: showOnboarding ? "translateY(0)" : "translateY(70px)",
               opacity: showOnboarding ? 1 : 0,
               transition: showOnboarding
-                ? "transform 1200ms cubic-bezier(0.16, 1, 0.3, 1) 650ms, opacity 1000ms ease-out 650ms"
+                ? "transform 1100ms cubic-bezier(0.16, 1, 0.3, 1) 500ms, opacity 900ms ease-out 500ms"
                 : "none",
             }}
           >
@@ -236,76 +242,6 @@ export default function SplashPage() {
           </p>
         </div>
       </div>
-
-      {/* Keyframe animations — scaleX squeeze for the turn, not rotateY */}
-      <style jsx global>{`
-        @keyframes train-journey {
-          0% {
-            transform: translateX(-50%) scale(0.1);
-            opacity: 0.05;
-          }
-          8% {
-            opacity: 0.4;
-          }
-          /* Arrive at station */
-          35% {
-            transform: translateX(-50%) scale(1) scaleX(1);
-            opacity: 1;
-          }
-          /* Hold at station */
-          50% {
-            transform: translateX(-50%) scale(1) scaleX(1);
-            opacity: 1;
-          }
-          /* Begin turning — squeeze horizontally while drifting left */
-          58% {
-            transform: translateX(-45%) scale(1) scaleX(0.6);
-            opacity: 1;
-          }
-          /* Tightest squeeze = midpoint of turn */
-          63% {
-            transform: translateX(-35%) scale(1) scaleX(0.15);
-            opacity: 1;
-          }
-          /* Side view expanding out, now moving left */
-          70% {
-            transform: translateX(-30%) scale(1) scaleX(0.7);
-            opacity: 1;
-          }
-          /* Side view full, cruising left past skyline */
-          78% {
-            transform: translateX(-60%) scale(1) scaleX(1);
-            opacity: 1;
-          }
-          88% {
-            transform: translateX(-200%) scale(1) scaleX(1);
-            opacity: 0.7;
-          }
-          100% {
-            transform: translateX(-380%) scale(1) scaleX(1);
-            opacity: 0;
-          }
-        }
-
-        @keyframes front-view {
-          0% { opacity: 1; }
-          50% { opacity: 1; }
-          /* Fade out during squeeze */
-          60% { opacity: 0.6; }
-          63% { opacity: 0; }
-          100% { opacity: 0; }
-        }
-
-        @keyframes side-view {
-          0% { opacity: 0; }
-          60% { opacity: 0; }
-          /* Fade in during expansion from squeeze */
-          63% { opacity: 0; }
-          67% { opacity: 0.7; }
-          70% { opacity: 1; }
-          100% { opacity: 1; }
-        }
-      `}</style>
     </div>
   );
 }
