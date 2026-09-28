@@ -102,8 +102,6 @@ export default function OnboardingPage() {
           </div>
         </div>
 
-        {/* Bottom progress bar */}
-        <div className="absolute bottom-0 left-0 right-0 h-[4px] bg-[rgba(232,166,60,0.25)] z-10" />
       </div>
       </div>
     </div>

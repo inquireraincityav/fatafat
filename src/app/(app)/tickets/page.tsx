@@ -3,11 +3,12 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { GearIcon, FromDotIcon, ToDotIcon, SwapIcon } from "@/components/icons";
+import { GearIcon, FromDotIcon, ToDotIcon, SwapIcon, GooglePayIcon, ApplePayIcon } from "@/components/icons";
 
 type TicketsTab = "my-tickets" | "buy";
 type TicketClass = "second" | "first";
 type TicketStatus = "valid" | "completed";
+type PaymentMethod = "google_pay" | "apple_pay";
 
 interface Ticket {
   id: string;
@@ -16,6 +17,8 @@ interface Ticket {
   ticketClass: TicketClass;
   type: string;
   price: string;
+  quantity: number;
+  paymentMethod: PaymentMethod;
   status: TicketStatus;
   purchasedAt: string;
   validUntil?: string;
@@ -124,14 +127,21 @@ function ActiveTicketCard({ ticket, onScan }: { ticket: Ticket; onScan: (id: str
               className="font-[family-name:var(--font-heading)] font-semibold text-[18px] leading-[28px] text-cream-50 pt-[4px]"
               style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
             >
-              {ticket.from} &rarr; {ticket.to}
+              {ticket.from} - {ticket.to}
             </h3>
             <p className="text-[12px] leading-[16px] text-[#7a8ea0] pt-[2px]">
-              {ticket.ticketClass === "first" ? "First" : "Second"} class &middot; {ticket.type}
+              {ticket.ticketClass === "first" ? "First" : "Second"} class · {ticket.type}
             </p>
           </div>
-          <div className="bg-[rgba(232,166,60,0.2)] px-[10px] py-[4px] rounded-full">
-            <span className="font-medium text-[12px] leading-[16px] text-amber-500">Valid</span>
+          <div className="flex flex-col items-end gap-[4px]">
+            <div className="bg-[rgba(232,166,60,0.2)] px-[10px] py-[4px] rounded-full">
+              <span className="font-medium text-[12px] leading-[16px] text-amber-500">Valid</span>
+            </div>
+            {ticket.quantity > 1 && (
+              <div className="bg-[rgba(232,166,60,0.15)] px-[8px] py-[2px] rounded-full">
+                <span className="font-medium text-[11px] leading-[14px] text-amber-500">x{ticket.quantity}</span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -153,9 +163,17 @@ function ActiveTicketCard({ ticket, onScan }: { ticket: Ticket; onScan: (id: str
 
       <div className="px-[20px] pb-[16px]">
         <div className="flex items-center justify-between">
-          <span className="text-[12px] leading-[16px] text-[#5a7090]">
-            {ticket.price} &middot; {ticket.ticketClass === "first" ? "First" : "Second"} class
-          </span>
+          <div className="flex items-center gap-[6px]">
+            <span className="text-[12px] leading-[16px] text-[#5a7090]">
+              {ticket.price}{ticket.quantity > 1 ? ` x${ticket.quantity}` : ""}
+            </span>
+            <span className="text-[12px] leading-[16px] text-[#5a7090]">·</span>
+            {ticket.paymentMethod === "google_pay" ? (
+              <span className="text-[11px] leading-[14px] text-[#5a7090]">GPay</span>
+            ) : (
+              <span className="text-[11px] leading-[14px] text-[#5a7090]">Apple Pay</span>
+            )}
+          </div>
           <button
             onClick={() => onScan(ticket.id)}
             className="bg-[rgba(232,166,60,0.2)] px-[12px] py-[4px] rounded-full"
@@ -230,7 +248,7 @@ function MyTicketsTab({
         </button>
       </div>
 
-      {/* Active tickets — horizontal slider */}
+      {/* Active tickets */}
       {activeTickets.length > 0 && (
         <div className="flex flex-col gap-[8px]">
           <div className="px-[16px] flex items-center justify-between">
@@ -239,7 +257,7 @@ function MyTicketsTab({
             </span>
             {activeTickets.length > 1 && (
               <span className="text-[11px] leading-[16px] text-text-muted">
-                Swipe to see all &rarr;
+                Swipe to see all
               </span>
             )}
           </div>
@@ -255,7 +273,7 @@ function MyTicketsTab({
         </div>
       )}
 
-      {/* History / Completed */}
+      {/* History */}
       {completedTickets.length > 0 && (
         <div className="flex flex-col px-[16px]">
           <p className="font-semibold text-[12px] leading-[16px] text-text-muted tracking-[0.84px] uppercase">
@@ -270,14 +288,14 @@ function MyTicketsTab({
                 <div className="flex flex-col">
                   <div className="flex items-center gap-[8px]">
                     <p className="text-[14px] leading-[20px] text-text-primary">
-                      {ticket.from} &rarr; {ticket.to}
+                      {ticket.from} - {ticket.to}
                     </p>
                     <span className="bg-cream-200 px-[6px] py-[1px] rounded-full text-[10px] leading-[14px] text-text-muted">
                       Completed
                     </span>
                   </div>
                   <p className="text-[12px] leading-[16px] text-text-muted">
-                    {ticket.purchasedAt} &middot; {ticket.type}
+                    {ticket.purchasedAt} · {ticket.type}{ticket.quantity > 1 ? ` x${ticket.quantity}` : ""}
                   </p>
                 </div>
                 <span className="text-[14px] leading-[20px] text-text-tertiary">{ticket.price}</span>
@@ -304,6 +322,8 @@ function BuyTab({
   const [to, setTo] = useState(initialTo || "Churchgate");
   const [ticketClass, setTicketClass] = useState<TicketClass>("second");
   const [selectedFare, setSelectedFare] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("google_pay");
 
   function handleSwap() {
     setFrom(to);
@@ -316,14 +336,17 @@ function BuyTab({
 
   function handlePurchase() {
     const option = fareOptions[selectedFare];
-    const price = ticketClass === "second" ? option.secondPrice : option.firstPrice;
+    const unitPrice = ticketClass === "second" ? option.secondPrice : option.firstPrice;
+    const totalPrice = unitPrice * quantity;
     const newTicket: Ticket = {
       id: `ticket_${Date.now()}`,
       from,
       to,
       ticketClass,
       type: option.label,
-      price: `₹${price.toLocaleString()}`,
+      price: `₹${totalPrice.toLocaleString()}`,
+      quantity,
+      paymentMethod,
       status: "valid",
       purchasedAt: new Date().toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit", hour12: true }),
       validUntil: `Valid until ${new Date(Date.now() + 8 * 60 * 60 * 1000).toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit", hour12: true })} today`,
@@ -331,9 +354,10 @@ function BuyTab({
     onPurchase(newTicket);
   }
 
-  const currentPrice = ticketClass === "second"
+  const unitPrice = ticketClass === "second"
     ? fareOptions[selectedFare].secondPrice
     : fareOptions[selectedFare].firstPrice;
+  const totalPrice = unitPrice * quantity;
 
   return (
     <div className="flex flex-col gap-[12px] overflow-y-auto px-[16px] pb-[16px]">
@@ -421,12 +445,70 @@ function BuyTab({
         })}
       </div>
 
-      {/* Info box */}
-      <div className="bg-cream-200 rounded-[12px] px-[16px] py-[12px] flex gap-[8px] items-start">
-        <span className="text-text-tertiary text-[12px] pt-px shrink-0">&#9432;</span>
-        <p className="text-[12px] leading-[16px] text-text-tertiary">
-          Ticket is valid for {from} to {to} section. Route can be changed above.
+      {/* Quantity selector */}
+      <div className="bg-cream-50 border-[1.119px] border-border-light rounded-[16px] px-[16px] py-[14px] flex items-center justify-between">
+        <p className="text-[14px] leading-[20px] text-text-primary font-medium">Quantity</p>
+        <div className="flex items-center gap-[16px]">
+          <button
+            onClick={() => setQuantity(Math.max(1, quantity - 1))}
+            disabled={quantity <= 1}
+            className={`w-[32px] h-[32px] rounded-full flex items-center justify-center ${
+              quantity <= 1 ? "bg-cream-200 text-text-muted" : "bg-navy-900 text-cream-50"
+            }`}
+          >
+            <span className="text-[16px] leading-[16px] font-medium">-</span>
+          </button>
+          <span
+            className="font-[family-name:var(--font-heading)] font-semibold text-[20px] leading-[28px] text-navy-900 w-[24px] text-center"
+            style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
+          >
+            {quantity}
+          </span>
+          <button
+            onClick={() => setQuantity(Math.min(10, quantity + 1))}
+            disabled={quantity >= 10}
+            className={`w-[32px] h-[32px] rounded-full flex items-center justify-center ${
+              quantity >= 10 ? "bg-cream-200 text-text-muted" : "bg-navy-900 text-cream-50"
+            }`}
+          >
+            <span className="text-[16px] leading-[16px] font-medium">+</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Payment method */}
+      <div className="flex flex-col gap-[8px]">
+        <p className="text-[12px] leading-[16px] text-text-muted font-semibold tracking-[0.84px] uppercase">
+          Pay with
         </p>
+        <div className="flex gap-[8px]">
+          <button
+            onClick={() => setPaymentMethod("google_pay")}
+            className={`flex-1 flex items-center justify-center gap-[8px] py-[14px] rounded-[16px] ${
+              paymentMethod === "google_pay"
+                ? "bg-navy-900"
+                : "bg-cream-50 border-[1.119px] border-border-light"
+            }`}
+          >
+            <GooglePayIcon />
+            <span className={`font-medium text-[14px] leading-[20px] ${paymentMethod === "google_pay" ? "text-cream-50" : "text-text-primary"}`}>
+              Google Pay
+            </span>
+          </button>
+          <button
+            onClick={() => setPaymentMethod("apple_pay")}
+            className={`flex-1 flex items-center justify-center gap-[8px] py-[14px] rounded-[16px] ${
+              paymentMethod === "apple_pay"
+                ? "bg-navy-900"
+                : "bg-cream-50 border-[1.119px] border-border-light"
+            }`}
+          >
+            <ApplePayIcon />
+            <span className={`font-medium text-[14px] leading-[20px] ${paymentMethod === "apple_pay" ? "text-cream-50" : "text-text-primary"}`}>
+              Apple Pay
+            </span>
+          </button>
+        </div>
       </div>
 
       {/* CTA button */}
@@ -435,7 +517,7 @@ function BuyTab({
         className="bg-amber-500 rounded-[16px] py-[16px] w-full flex items-center justify-center"
       >
         <span className="font-semibold text-[16px] leading-[24px] text-navy-900 text-center">
-          Buy ticket &middot; {"₹"}{currentPrice.toLocaleString()}
+          Buy {quantity > 1 ? `${quantity} tickets` : "ticket"} · {"₹"}{totalPrice.toLocaleString()}
         </span>
       </button>
     </div>

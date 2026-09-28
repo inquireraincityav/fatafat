@@ -5,48 +5,33 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import TopBar from "@/components/shared/TopBar";
 import LineBadge from "@/components/shared/LineBadge";
-import CrowdBadge from "@/components/shared/CrowdBadge";
-import { SearchIcon, BusIcon } from "@/components/icons";
-import type { Route } from "@/types";
+import { SearchIcon } from "@/components/icons";
+import type { Line } from "@/types";
 
 const MumbaiTransitMap = dynamic(
   () => import("@/components/shared/MumbaiTransitMap"),
   { ssr: false }
 );
 
-const mockRoutes: Route[] = [
-  {
-    from: { id: "andheri", name: "Andheri", line: "western" },
-    to: { id: "churchgate", name: "Churchgate", line: "western" },
-    line: "western",
-    speed: "Fast",
-    platform: "P2",
-    nextTrainMin: 2,
-    followingTrainMin: 9,
-    crowdLevel: "moderate",
-  },
-  {
-    from: { id: "andheri", name: "Andheri", line: "harbour" },
-    to: { id: "bandra", name: "Bandra", line: "harbour" },
-    line: "harbour",
-    speed: "Slow",
-    platform: "P4",
-    bestBus: "BEST 221",
-    nextTrainMin: 5,
-    followingTrainMin: 17,
-    crowdLevel: "crowded",
-  },
-  {
-    from: { id: "dadar", name: "Dadar", line: "central" },
-    to: { id: "csmt", name: "CSMT", line: "central" },
-    line: "central",
-    speed: "Fast",
-    platform: "P5",
-    nextTrainMin: 7,
-    followingTrainMin: 21,
-    crowdLevel: "light",
-  },
-];
+interface SavedTrip {
+  id: string;
+  from: string;
+  to: string;
+  line: string;
+  lastUsed: string;
+  count: number;
+}
+
+const TRIPS_KEY = "fatafat_trips";
+
+function loadTrips(): SavedTrip[] {
+  try {
+    const raw = localStorage.getItem(TRIPS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
 
 function LiveDot() {
   return (
@@ -57,58 +42,50 @@ function LiveDot() {
   );
 }
 
-function CommuteRow({ route, isLast }: { route: Route; isLast: boolean }) {
+function formatLastUsed(iso: string): string {
+  const date = new Date(iso);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  if (diffHours < 1) return "Just now";
+  if (diffHours < 24) return `${diffHours}h ago`;
+  const diffDays = Math.floor(diffHours / 24);
+  if (diffDays === 1) return "Yesterday";
+  if (diffDays < 7) return `${diffDays}d ago`;
+  return date.toLocaleDateString("en-IN", { day: "numeric", month: "short" });
+}
+
+function CommuteRow({ trip, isLast }: { trip: SavedTrip; isLast: boolean }) {
   return (
     <Link
-      href={`/journey?from=${encodeURIComponent(route.from.name)}&to=${encodeURIComponent(route.to.name)}`}
+      href={`/journey?from=${encodeURIComponent(trip.from)}&to=${encodeURIComponent(trip.to)}`}
       className={`bg-cream-100 flex flex-col overflow-clip ${
         !isLast ? "border-b-[1.119px] border-border-light" : ""
       } active:bg-cream-200 transition-colors`}
     >
       <div className="flex gap-[12px] items-center px-[16px] py-[10px]">
-        <LineBadge line={route.line} />
+        <LineBadge line={trip.line as Line} />
         <div className="flex-1 flex flex-col min-w-0">
           <p className="font-semibold text-[14px] leading-[17.5px] text-text-primary truncate">
-            {route.from.name} - {route.to.name}
+            {trip.from} - {trip.to}
           </p>
           <div className="flex items-center gap-[6px] pt-[2px]">
             <span className="text-[11px] leading-[16.5px] text-text-muted">
-              {route.speed} · {route.platform}
+              {formatLastUsed(trip.lastUsed)}
             </span>
-            {route.bestBus && (
+            {trip.count > 1 && (
               <>
                 <span className="text-[11px] leading-[16.5px] text-cream-400">·</span>
-                <BusIcon />
                 <span className="text-[11px] leading-[16.5px] text-text-muted">
-                  {route.bestBus}
+                  {trip.count} trips
                 </span>
               </>
             )}
           </div>
         </div>
-        <div className="flex items-start gap-[6px] shrink-0">
-          <div className="flex flex-col items-center">
-            <LiveDot />
-            <span
-              className="font-[family-name:var(--font-heading)] font-semibold text-[22px] leading-[22px] text-text-primary"
-              style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
-            >
-              {route.nextTrainMin}
-            </span>
-            <span className="text-[10px] leading-[15px] text-text-muted pt-px">
-              min
-            </span>
-          </div>
-          <div className="flex flex-col items-center pt-[2px]">
-            <div className="h-[9px]" />
-            <span
-              className="font-[family-name:var(--font-heading)] font-normal text-[15px] leading-[22.5px] text-cream-500"
-              style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
-            >
-              {route.followingTrainMin}
-            </span>
-          </div>
-          <CrowdBadge level={route.crowdLevel} />
+        <div className="flex items-center gap-[6px] shrink-0">
+          {trip.count >= 3 && <LiveDot />}
+          <span className="text-[12px] leading-[16px] text-amber-600 font-medium">Go</span>
         </div>
       </div>
     </Link>
@@ -134,16 +111,17 @@ function NewUserPrompt() {
 }
 
 export default function HomePage() {
-  const [isNewUser, setIsNewUser] = useState(true);
+  const [trips, setTrips] = useState<SavedTrip[]>([]);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    try {
-      const userType = localStorage.getItem("fatafat_user_type");
-      setIsNewUser(userType === "new" || userType === null);
-    } catch {
-      setIsNewUser(false);
-    }
+    const loaded = loadTrips();
+    loaded.sort((a, b) => b.count - a.count || new Date(b.lastUsed).getTime() - new Date(a.lastUsed).getTime());
+    setTrips(loaded);
+    setMounted(true);
   }, []);
+
+  const hasTrips = mounted && trips.length > 0;
 
   return (
     <div className="bg-cream-100 flex flex-col flex-1">
@@ -179,7 +157,7 @@ export default function HomePage() {
           </Link>
         </div>
 
-        {isNewUser ? (
+        {!hasTrips ? (
           <NewUserPrompt />
         ) : (
           <>
@@ -188,18 +166,18 @@ export default function HomePage() {
               <span className="font-semibold text-[12px] leading-[16px] text-text-muted tracking-[0.84px] uppercase">
                 Daily commute
               </span>
-              <button className="text-[12px] leading-[16px] text-text-muted text-center">
-                All routes
-              </button>
+              <span className="text-[12px] leading-[16px] text-text-muted text-center">
+                {trips.length} route{trips.length !== 1 ? "s" : ""}
+              </span>
             </div>
 
             {/* Routes list */}
             <div className="border-t-[1.119px] border-border-light">
-              {mockRoutes.map((route, i) => (
+              {trips.slice(0, 5).map((trip, i) => (
                 <CommuteRow
-                  key={`${route.from.id}-${route.to.id}`}
-                  route={route}
-                  isLast={i === mockRoutes.length - 1}
+                  key={trip.id}
+                  trip={trip}
+                  isLast={i === Math.min(trips.length, 5) - 1}
                 />
               ))}
             </div>

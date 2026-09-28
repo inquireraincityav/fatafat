@@ -16,7 +16,7 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "Fatafat — Mumbai Transit Companion",
+  title: "Fatafat - Mumbai Transit Companion",
   description: "Western · Central · Harbour · BEST",
   manifest: "/manifest.json",
   appleWebApp: {

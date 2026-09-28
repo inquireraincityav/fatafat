@@ -8,7 +8,7 @@ const steps = [
   {
     emoji: "\u{1F686}",
     title: "Fast vs. slow trains",
-    body: 'Mumbai trains run on the same tracks but stop at different stations. "Fast" trains skip smaller stops — great for long trips. "Slow" trains stop everywhere. The board on the platform (and this app) always tells you which is which.',
+    body: 'Mumbai trains run on the same tracks but stop at different stations. "Fast" trains skip smaller stops - great for long trips. "Slow" trains stop everywhere. The board on the platform (and this app) always tells you which is which.',
   },
   {
     emoji: "\u{1F6AA}",
@@ -79,7 +79,7 @@ export default function IntroPage() {
           </div>
 
           <p className="text-[12px] leading-[16px] text-[rgba(200,216,232,0.5)] text-center pb-[24px]">
-            You can always find these guides under Explore &rarr; Basics
+            You can always find these guides under Explore &gt; Basics
           </p>
         </div>
 

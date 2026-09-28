@@ -53,6 +53,5 @@ export interface NotificationSetting {
 
 export type NavTab = 'home' | 'tickets' | 'explore';
 
-export type ExploreTab = 'plan' | 'network' | 'basics';
 
 export type TicketsTab = 'my-tickets' | 'buy';

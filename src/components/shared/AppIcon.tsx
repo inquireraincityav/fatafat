@@ -7,7 +7,6 @@ export default function AppIcon({ size = 80 }: { size?: number }) {
       alt="Fatafat"
       width={size}
       height={size}
-      className="rounded-[22%]"
       priority
     />
   );

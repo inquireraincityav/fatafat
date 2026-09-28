@@ -57,7 +57,7 @@ export default function PaymentSuccessPage() {
             <div className="flex items-start justify-between">
               <span className="text-[14px] leading-[20px] text-text-tertiary">Route</span>
               <span className="font-medium text-[14px] leading-[20px] text-text-primary">
-                Andheri &rarr; Churchgate
+                Andheri to Churchgate
               </span>
             </div>
             <div className="flex items-start justify-between pt-[8px]">
@@ -97,7 +97,7 @@ export default function PaymentSuccessPage() {
             className="bg-navy-900 rounded-[16px] py-[16px] w-full flex items-center justify-center"
           >
             <span className="font-semibold text-[16px] leading-[24px] text-cream-50 text-center">
-              View my tickets &rarr;
+              View my tickets
             </span>
           </Link>
         </div>

@@ -312,7 +312,7 @@ function OnBoardContent() {
               <span className="text-[14px]">{"🔔"}</span>
               <p className="text-[12px] leading-[19.5px] text-amber-500">
                 {remainingCount === 1
-                  ? `Next stop is ${destination.name} — get ready!`
+                  ? `Next stop is ${destination.name} - get ready!`
                   : `${remainingCount} stops to ${destination.name}`}
               </p>
             </div>
@@ -425,14 +425,33 @@ function OnBoardContent() {
           style={{ paddingBottom: "max(16px, env(safe-area-inset-bottom, 16px))" }}
         >
           {arrived ? (
-            <Link
-              href="/home"
+            <button
+              onClick={() => {
+                try {
+                  const TRIPS_KEY = "fatafat_trips";
+                  const raw = localStorage.getItem(TRIPS_KEY);
+                  const trips: { id: string; from: string; to: string; line: string; lastUsed: string; count: number }[] = raw ? JSON.parse(raw) : [];
+                  const tripId = `${fromParam.toLowerCase().replace(/\s+/g, "-")}_${toParam.toLowerCase().replace(/\s+/g, "-")}`;
+                  const existing = trips.find((t) => t.id === tripId);
+                  if (existing) {
+                    existing.count += 1;
+                    existing.lastUsed = new Date().toISOString();
+                  } else {
+                    trips.push({ id: tripId, from: fromParam, to: toParam, line, lastUsed: new Date().toISOString(), count: 1 });
+                  }
+                  localStorage.setItem(TRIPS_KEY, JSON.stringify(trips));
+                  if (localStorage.getItem("fatafat_user_type") === "new") {
+                    localStorage.setItem("fatafat_user_type", "regular");
+                  }
+                } catch {}
+                router.push("/home");
+              }}
               className="bg-amber-500 rounded-[16px] py-[14px] flex items-center justify-center w-full"
             >
               <span className="font-semibold text-[14px] leading-[20px] text-navy-900 text-center">
-                Done — back to home
+                Done - back to home
               </span>
-            </Link>
+            </button>
           ) : (
             <Link
               href="/tickets"
