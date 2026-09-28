@@ -26,8 +26,8 @@ export default function BottomNav() {
   }
 
   return (
-    <nav className="bg-cream-50 border-t-[1.119px] border-border-dark flex items-center shrink-0"
-      style={{ minHeight: "64px", paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+    <nav className="bg-cream-50 border-t-[1.119px] border-border-dark flex items-start shrink-0"
+      style={{ paddingTop: "8px", paddingBottom: "max(8px, env(safe-area-inset-bottom, 8px))" }}
     >
       {tabs.map((tab) => {
         const active = isActive(tab.id);
