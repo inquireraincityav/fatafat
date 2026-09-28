@@ -102,7 +102,7 @@ function TabSwitcher({ active, onSelect }: { active: TicketsTab; onSelect: (tab:
           <button
             key={tab.id}
             onClick={() => onSelect(tab.id)}
-            className={`flex-1 flex flex-col h-full items-center justify-center rounded-[8px] ${
+            className={`flex-1 flex flex-col h-full items-center justify-center rounded-[8px] active:scale-[0.97] transition-all duration-150 ${
               active === tab.id ? "bg-cream-50 shadow-[0px_1px_2px_rgba(0,0,0,0.08)]" : ""
             }`}
           >
@@ -176,7 +176,7 @@ function ActiveTicketCard({ ticket, onScan }: { ticket: Ticket; onScan: (id: str
           </div>
           <button
             onClick={() => onScan(ticket.id)}
-            className="bg-[rgba(232,166,60,0.2)] px-[12px] py-[4px] rounded-full"
+            className="bg-[rgba(232,166,60,0.2)] px-[12px] py-[4px] rounded-full active:scale-[0.95] transition-transform duration-150"
           >
             <span className="font-medium text-[11px] leading-[16px] text-amber-500">
               Mark as scanned
@@ -209,7 +209,7 @@ function EmptyTicketsState({ onBuyTicket }: { onBuyTicket: () => void }) {
       </p>
       <button
         onClick={onBuyTicket}
-        className="bg-amber-500 rounded-[16px] px-[24px] py-[14px] flex items-center gap-[8px]"
+        className="bg-amber-500 rounded-[16px] px-[24px] py-[14px] flex items-center gap-[8px] active:scale-[0.97] transition-transform duration-150"
       >
         <span className="text-[18px] leading-[18px] text-navy-900 font-light">+</span>
         <span className="font-semibold text-[14px] leading-[20px] text-navy-900">Buy a ticket</span>
@@ -241,7 +241,7 @@ function MyTicketsTab({
       <div className="px-[16px]">
         <button
           onClick={onBuyTicket}
-          className="bg-amber-500 rounded-[16px] px-[16px] py-[14px] flex items-center justify-center gap-[8px] shrink-0 w-full"
+          className="bg-amber-500 rounded-[16px] px-[16px] py-[14px] flex items-center justify-center gap-[8px] shrink-0 w-full active:scale-[0.98] transition-transform duration-150"
         >
           <span className="text-[20px] leading-[20px] text-navy-900 font-light">+</span>
           <span className="font-semibold text-[14px] leading-[20px] text-navy-900">Buy a new ticket</span>
@@ -393,7 +393,7 @@ function BuyTab({
       <div className="bg-cream-200 flex h-[42px] items-start overflow-clip p-[3px] rounded-[12px]">
         <button
           onClick={() => setTicketClass("second")}
-          className={`flex-1 flex flex-col h-full items-center justify-center rounded-[8px] ${
+          className={`flex-1 flex flex-col h-full items-center justify-center rounded-[8px] active:scale-[0.97] transition-all duration-150 ${
             ticketClass === "second" ? "bg-cream-50 shadow-[0px_1px_2px_rgba(0,0,0,0.08)]" : ""
           }`}
         >
@@ -403,7 +403,7 @@ function BuyTab({
         </button>
         <button
           onClick={() => setTicketClass("first")}
-          className={`flex-1 flex flex-col h-full items-center justify-center rounded-[8px] ${
+          className={`flex-1 flex flex-col h-full items-center justify-center rounded-[8px] active:scale-[0.97] transition-all duration-150 ${
             ticketClass === "first" ? "bg-cream-50 shadow-[0px_1px_2px_rgba(0,0,0,0.08)]" : ""
           }`}
         >
@@ -422,7 +422,7 @@ function BuyTab({
             <button
               key={option.label}
               onClick={() => setSelectedFare(i)}
-              className={`flex items-center justify-between px-[16px] py-[14px] rounded-[16px] ${
+              className={`flex items-center justify-between px-[16px] py-[14px] rounded-[16px] active:scale-[0.98] transition-all duration-150 ${
                 isSelected ? "bg-navy-900" : "bg-cream-50 border-[1.119px] border-border-light"
               }`}
             >
@@ -452,7 +452,7 @@ function BuyTab({
           <button
             onClick={() => setQuantity(Math.max(1, quantity - 1))}
             disabled={quantity <= 1}
-            className={`w-[32px] h-[32px] rounded-full flex items-center justify-center ${
+            className={`w-[32px] h-[32px] rounded-full flex items-center justify-center active:scale-[0.92] transition-transform duration-150 ${
               quantity <= 1 ? "bg-cream-200 text-text-muted" : "bg-navy-900 text-cream-50"
             }`}
           >
@@ -467,7 +467,7 @@ function BuyTab({
           <button
             onClick={() => setQuantity(Math.min(10, quantity + 1))}
             disabled={quantity >= 10}
-            className={`w-[32px] h-[32px] rounded-full flex items-center justify-center ${
+            className={`w-[32px] h-[32px] rounded-full flex items-center justify-center active:scale-[0.92] transition-transform duration-150 ${
               quantity >= 10 ? "bg-cream-200 text-text-muted" : "bg-navy-900 text-cream-50"
             }`}
           >
@@ -484,7 +484,7 @@ function BuyTab({
         <div className="flex gap-[8px]">
           <button
             onClick={() => setPaymentMethod("google_pay")}
-            className={`flex-1 flex items-center justify-center gap-[8px] py-[14px] rounded-[16px] ${
+            className={`flex-1 flex items-center justify-center gap-[8px] py-[14px] rounded-[16px] active:scale-[0.97] transition-all duration-150 ${
               paymentMethod === "google_pay"
                 ? "bg-navy-900"
                 : "bg-cream-50 border-[1.119px] border-border-light"
@@ -497,7 +497,7 @@ function BuyTab({
           </button>
           <button
             onClick={() => setPaymentMethod("apple_pay")}
-            className={`flex-1 flex items-center justify-center gap-[8px] py-[14px] rounded-[16px] ${
+            className={`flex-1 flex items-center justify-center gap-[8px] py-[14px] rounded-[16px] active:scale-[0.97] transition-all duration-150 ${
               paymentMethod === "apple_pay"
                 ? "bg-navy-900"
                 : "bg-cream-50 border-[1.119px] border-border-light"
@@ -514,7 +514,7 @@ function BuyTab({
       {/* CTA button */}
       <button
         onClick={handlePurchase}
-        className="bg-amber-500 rounded-[16px] py-[16px] w-full flex items-center justify-center"
+        className="bg-amber-500 rounded-[16px] py-[16px] w-full flex items-center justify-center active:scale-[0.98] transition-transform duration-150"
       >
         <span className="font-semibold text-[16px] leading-[24px] text-navy-900 text-center">
           Buy {quantity > 1 ? `${quantity} tickets` : "ticket"} · {"₹"}{totalPrice.toLocaleString()}

@@ -97,14 +97,14 @@ export default function WalkthroughPage() {
         <div className="flex justify-end px-[20px] pt-[16px]">
           <button
             onClick={handleSkip}
-            className="text-[14px] leading-[20px] text-text-muted"
+            className="text-[14px] leading-[20px] text-text-muted active:opacity-60 transition-opacity duration-150"
           >
             Skip
           </button>
         </div>
 
         {/* Content */}
-        <div className="flex-1 flex flex-col items-center justify-center px-[32px]">
+        <div key={currentStep} className="flex-1 flex flex-col items-center justify-center px-[32px]" style={{ animation: "fade-in-up 300ms ease-out" }}>
           {/* Icon */}
           <div className="bg-[rgba(232,166,60,0.08)] border-[1.119px] border-[rgba(232,166,60,0.15)] rounded-[28px] w-[120px] h-[120px] flex items-center justify-center mb-[32px]">
             {step.icon}
@@ -145,7 +145,7 @@ export default function WalkthroughPage() {
         >
           <button
             onClick={handleNext}
-            className="bg-amber-500 rounded-[16px] py-[16px] w-full"
+            className="bg-amber-500 rounded-[16px] py-[16px] w-full active:scale-[0.98] transition-transform duration-150"
           >
             <span className="font-semibold text-[16px] leading-[24px] text-navy-900 text-center">
               {isLast ? "Get started" : "Next"}

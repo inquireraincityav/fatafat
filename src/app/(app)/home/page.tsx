@@ -55,13 +55,14 @@ function formatLastUsed(iso: string): string {
   return date.toLocaleDateString("en-IN", { day: "numeric", month: "short" });
 }
 
-function CommuteRow({ trip, isLast }: { trip: SavedTrip; isLast: boolean }) {
+function CommuteRow({ trip, isLast, index }: { trip: SavedTrip; isLast: boolean; index: number }) {
   return (
     <Link
       href={`/journey?from=${encodeURIComponent(trip.from)}&to=${encodeURIComponent(trip.to)}`}
       className={`bg-cream-100 flex flex-col overflow-clip ${
         !isLast ? "border-b-[1.119px] border-border-light" : ""
-      } active:bg-cream-200 transition-colors`}
+      } active:bg-cream-200 active:scale-[0.99] transition-all duration-150`}
+      style={{ animation: `fade-in-up 300ms ease-out ${index * 60}ms both` }}
     >
       <div className="flex gap-[12px] items-center px-[16px] py-[10px]">
         <LineBadge line={trip.line as Line} />
@@ -140,7 +141,7 @@ export default function HomePage() {
         <div className="px-[16px] pb-[8px]">
           <Link
             href="/station-picker"
-            className="bg-cream-50 border-[1.119px] border-border-medium rounded-[12px] flex items-center gap-[10px] px-[16px] py-[12px] w-full"
+            className="bg-cream-50 border-[1.119px] border-border-medium rounded-[12px] flex items-center gap-[10px] px-[16px] py-[12px] w-full active:scale-[0.98] transition-transform duration-150"
           >
             <SearchIcon />
             <span className="text-[14px] leading-[21px] text-text-muted text-center">
@@ -178,6 +179,7 @@ export default function HomePage() {
                   key={trip.id}
                   trip={trip}
                   isLast={i === Math.min(trips.length, 5) - 1}
+                  index={i}
                 />
               ))}
             </div>

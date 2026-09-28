@@ -60,7 +60,7 @@ export default function ExplorePage() {
         </h1>
         <Link
           href="/settings"
-          className="bg-cream-200 flex items-center justify-center rounded-full w-[36px] h-[36px]"
+          className="bg-cream-200 flex items-center justify-center rounded-full w-[36px] h-[36px] active:scale-[0.92] transition-transform duration-150"
         >
           <GearIcon />
         </Link>
@@ -73,7 +73,7 @@ export default function ExplorePage() {
             <button
               key={filter.id}
               onClick={() => setActiveFilter(filter.id)}
-              className={`flex flex-col items-center justify-center px-[12px] py-[4px] rounded-full shrink-0 ${
+              className={`flex flex-col items-center justify-center px-[12px] py-[4px] rounded-full shrink-0 active:scale-[0.95] transition-all duration-150 ${
                 activeFilter === filter.id
                   ? "bg-amber-500"
                   : "bg-cream-200"
@@ -114,7 +114,7 @@ export default function ExplorePage() {
         </div>
 
         <div className="px-[16px] py-[12px]">
-          <Link href="/network-map" className="bg-navy-900 w-full rounded-[12px] py-[10px] flex items-center justify-center">
+          <Link href="/network-map" className="bg-navy-900 w-full rounded-[12px] py-[10px] flex items-center justify-center active:scale-[0.98] transition-transform duration-150">
             <span className="font-semibold text-[14px] leading-[20px] text-cream-50 text-center">
               Open full interactive map
             </span>
@@ -129,11 +129,12 @@ export default function ExplorePage() {
             Mumbai rail basics
           </span>
         </div>
-        {basicsItems.map((item) => (
+        {basicsItems.map((item, i) => (
           <Link
             key={item.title}
             href="/intro"
-            className="bg-cream-50 border-[1.119px] border-border-light rounded-[16px] overflow-clip flex gap-[12px] items-center p-[16px] w-full text-left"
+            className="bg-cream-50 border-[1.119px] border-border-light rounded-[16px] overflow-clip flex gap-[12px] items-center p-[16px] w-full text-left active:scale-[0.98] active:bg-cream-200 transition-all duration-150"
+            style={{ animation: `fade-in-up 300ms ease-out ${i * 60}ms both` }}
           >
             <span className="text-[24px] leading-[32px] shrink-0">{item.emoji}</span>
             <div className="flex-1 flex flex-col min-w-0">

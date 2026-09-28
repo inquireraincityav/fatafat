@@ -56,7 +56,7 @@ export default function IntroPage() {
         </div>
 
         {/* Content */}
-        <div className="flex-1 flex flex-col items-center justify-center w-full max-w-[338px]">
+        <div key={currentStep} className="flex-1 flex flex-col items-center justify-center w-full max-w-[338px]" style={{ animation: "fade-in-up 300ms ease-out" }}>
           <div className="pb-[24px]">
             <span className="text-[48px] leading-[48px]">{step.emoji}</span>
           </div>
@@ -88,7 +88,7 @@ export default function IntroPage() {
           {currentStep > 0 && (
             <button
               onClick={() => setCurrentStep((prev) => prev - 1)}
-              className="border-[1.119px] border-[rgba(248,240,228,0.2)] rounded-[16px] py-[16px] flex-1 flex items-center justify-center"
+              className="border-[1.119px] border-[rgba(248,240,228,0.2)] rounded-[16px] py-[16px] flex-1 flex items-center justify-center active:scale-[0.98] transition-transform duration-150"
             >
               <span className="font-semibold text-[16px] leading-[24px] text-cream-100 text-center">
                 Back
@@ -97,7 +97,7 @@ export default function IntroPage() {
           )}
           <button
             onClick={handleNext}
-            className="bg-amber-500 rounded-[16px] py-[16px] flex-1 flex items-center justify-center"
+            className="bg-amber-500 rounded-[16px] py-[16px] flex-1 flex items-center justify-center active:scale-[0.98] transition-transform duration-150"
           >
             <span className="font-semibold text-[16px] leading-[24px] text-navy-900 text-center">
               {isLast ? "Start riding" : "Next"}

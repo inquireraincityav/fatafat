@@ -19,7 +19,7 @@ export default function TopBar({ greeting = "Good morning" }: { greeting?: strin
       </div>
       <Link
         href="/settings"
-        className="bg-cream-200 flex items-center justify-center rounded-full w-[36px] h-[36px]"
+        className="bg-cream-200 flex items-center justify-center rounded-full w-[36px] h-[36px] active:scale-[0.92] transition-transform duration-150"
       >
         <GearIcon />
       </Link>

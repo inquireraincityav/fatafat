@@ -346,7 +346,7 @@ function OnBoardContent() {
         <div className="flex gap-[12px] items-center pt-[20px] px-[16px] pb-[12px] shrink-0"
           style={{ paddingTop: "max(20px, env(safe-area-inset-top, 20px))" }}
         >
-          <button onClick={() => router.back()} className="shrink-0">
+          <button onClick={() => router.back()} className="shrink-0 active:scale-[0.92] transition-transform duration-150">
             <BackArrowIcon className="[&_path]:stroke-cream-50" />
           </button>
           <div className="flex-1">
@@ -580,7 +580,7 @@ function OnBoardContent() {
                 } catch {}
                 router.push("/home");
               }}
-              className="bg-amber-500 rounded-[16px] py-[14px] flex items-center justify-center w-full"
+              className="bg-amber-500 rounded-[16px] py-[14px] flex items-center justify-center w-full active:scale-[0.98] transition-transform duration-150"
             >
               <span className="font-semibold text-[14px] leading-[20px] text-navy-900 text-center">
                 Done - back to home
@@ -589,7 +589,7 @@ function OnBoardContent() {
           ) : (
             <Link
               href="/tickets"
-              className="bg-cream-50 rounded-[16px] py-[14px] flex items-center justify-center w-full"
+              className="bg-cream-50 rounded-[16px] py-[14px] flex items-center justify-center w-full active:scale-[0.98] transition-transform duration-150"
             >
               <span className="font-semibold text-[14px] leading-[20px] text-navy-900 text-center">
                 Show ticket

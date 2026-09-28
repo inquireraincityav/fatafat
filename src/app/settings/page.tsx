@@ -48,7 +48,7 @@ export default function SettingsPage() {
       <div className="bg-cream-100 flex flex-col flex-1 overflow-y-auto">
         {/* Header */}
         <div className="flex gap-[12px] items-center pb-[12px] pt-[20px] px-[16px]">
-          <button onClick={() => router.back()} className="shrink-0">
+          <button onClick={() => router.back()} className="shrink-0 active:scale-[0.92] transition-transform duration-150">
             <BackArrowIcon />
           </button>
           <h1
@@ -71,7 +71,7 @@ export default function SettingsPage() {
             <div className="flex flex-col gap-[8px] pt-[12px]">
               <button
                 onClick={() => setMode("new-rider")}
-                className={`flex gap-[16px] items-start p-[16px] rounded-[16px] text-left ${
+                className={`flex gap-[16px] items-start p-[16px] rounded-[16px] text-left active:scale-[0.99] transition-all duration-150 ${
                   mode === "new-rider"
                     ? "bg-navy-900"
                     : "bg-cream-50 border-[1.119px] border-border-light"
@@ -106,7 +106,7 @@ export default function SettingsPage() {
 
               <button
                 onClick={() => setMode("commuter")}
-                className={`flex gap-[16px] items-start p-[16px] rounded-[16px] text-left ${
+                className={`flex gap-[16px] items-start p-[16px] rounded-[16px] text-left active:scale-[0.99] transition-all duration-150 ${
                   mode === "commuter"
                     ? "bg-navy-900"
                     : "bg-cream-50 border-[1.119px] border-border-light"
@@ -168,7 +168,7 @@ export default function SettingsPage() {
                   }`}
                 >
                   <div className="flex-1 flex flex-col min-w-0">
-                    <p className="text-[14px] leading-[20px] text-text-primary">
+                    <p className="font-medium text-[14px] leading-[20px] text-text-primary">
                       {notif.label}
                     </p>
                     {notif.description && (
@@ -201,7 +201,7 @@ export default function SettingsPage() {
             </p>
             <div className="bg-cream-50 border-[1.119px] border-border-light rounded-[16px] overflow-clip mt-[12px]">
               <div className="flex items-center justify-between px-[16px] py-[14px] border-b-[1.119px] border-border-light">
-                <span className="text-[14px] leading-[20px] text-text-primary">
+                <span className="font-medium text-[14px] leading-[20px] text-text-primary">
                   Offline timetable
                 </span>
                 <span className="text-[12px] leading-[16px] text-text-tertiary">
@@ -209,7 +209,7 @@ export default function SettingsPage() {
                 </span>
               </div>
               <div className="flex items-center justify-between px-[16px] py-[14px] border-b-[1.119px] border-border-light">
-                <span className="text-[14px] leading-[20px] text-text-primary">
+                <span className="font-medium text-[14px] leading-[20px] text-text-primary">
                   Saved routes
                 </span>
                 <span className="text-[12px] leading-[16px] text-text-tertiary">
@@ -217,7 +217,7 @@ export default function SettingsPage() {
                 </span>
               </div>
               <div className="flex items-center justify-between px-[16px] py-[14px]">
-                <span className="text-[14px] leading-[20px] text-text-primary">
+                <span className="font-medium text-[14px] leading-[20px] text-text-primary">
                   App version
                 </span>
                 <span className="text-[12px] leading-[16px] text-text-tertiary">
@@ -233,7 +233,7 @@ export default function SettingsPage() {
               Contact us
             </p>
             <div className="bg-cream-50 border-[1.119px] border-border-light rounded-[16px] overflow-clip mt-[12px]">
-              <div className="flex gap-[12px] items-center px-[16px] py-[14px] border-b-[1.119px] border-border-light">
+              <div className="flex gap-[12px] items-center px-[16px] py-[14px] border-b-[1.119px] border-border-light active:bg-cream-200 transition-colors duration-150 cursor-pointer">
                 <div className="bg-[rgba(232,166,60,0.12)] flex items-center justify-center rounded-full w-[32px] h-[32px] shrink-0">
                   <PhoneIcon />
                 </div>
@@ -247,7 +247,7 @@ export default function SettingsPage() {
                 </div>
                 <ChevronRightIcon />
               </div>
-              <div className="flex gap-[12px] items-center px-[16px] py-[14px]">
+              <div className="flex gap-[12px] items-center px-[16px] py-[14px] active:bg-cream-200 transition-colors duration-150 cursor-pointer">
                 <div className="bg-[rgba(31,58,95,0.08)] flex items-center justify-center rounded-full w-[32px] h-[32px] shrink-0">
                   <MessageIcon />
                 </div>

@@ -92,7 +92,7 @@ export default function OnboardingPage() {
                 try { localStorage.setItem("fatafat_user_type", "new"); } catch {}
                 router.push("/walkthrough");
               }}
-              className="bg-amber-500 rounded-[16px] px-[20px] py-[16px] text-left w-full"
+              className="bg-amber-500 rounded-[16px] px-[20px] py-[16px] text-left w-full active:scale-[0.98] transition-transform duration-150"
             >
               <p className="font-semibold text-[16px] leading-[24px] text-text-primary">
                 I&apos;m new here
@@ -107,7 +107,7 @@ export default function OnboardingPage() {
                 try { localStorage.setItem("fatafat_user_type", "regular"); } catch {}
                 router.push("/home");
               }}
-              className="border-[1.119px] border-[rgba(248,240,228,0.25)] rounded-[16px] px-[20px] py-[16px] text-left w-full backdrop-blur-sm"
+              className="border-[1.119px] border-[rgba(248,240,228,0.25)] rounded-[16px] px-[20px] py-[16px] text-left w-full backdrop-blur-sm active:scale-[0.98] transition-transform duration-150"
             >
               <p className="font-semibold text-[16px] leading-[24px] text-text-on-dark">
                 I ride daily

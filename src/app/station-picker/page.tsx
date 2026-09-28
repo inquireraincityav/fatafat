@@ -127,7 +127,7 @@ export default function StationPickerPage() {
       >
         {/* Header */}
         <div className="flex gap-[12px] items-center pt-[20px] px-[16px] pb-[12px]">
-          <button onClick={() => router.back()} className="shrink-0">
+          <button onClick={() => router.back()} className="shrink-0 active:scale-[0.92] transition-transform duration-150">
             <BackArrowIcon />
           </button>
           <h1
@@ -191,7 +191,7 @@ export default function StationPickerPage() {
             {/* Swap button */}
             <button
               onClick={handleSwap}
-              className="absolute right-[16px] top-1/2 -translate-y-1/2 bg-cream-200 border-[1.119px] border-border-light rounded-full w-[32px] h-[32px] flex items-center justify-center"
+              className="absolute right-[16px] top-1/2 -translate-y-1/2 bg-cream-200 border-[1.119px] border-border-light rounded-full w-[32px] h-[32px] flex items-center justify-center active:scale-[0.92] transition-transform duration-150"
             >
               <SwapIcon />
             </button>
@@ -220,9 +220,9 @@ export default function StationPickerPage() {
                 <button
                   key={station.id}
                   onClick={() => selectStation(station.name)}
-                  className="flex items-center gap-[12px] py-[10px] w-full border-b-[1.119px] border-border-light"
+                  className="flex items-center gap-[12px] py-[10px] w-full border-b-[1.119px] border-border-light active:bg-cream-200 transition-colors duration-150"
                 >
-                  <span className="text-[14px] leading-[20px] text-text-primary">
+                  <span className="font-medium text-[14px] leading-[20px] text-text-primary">
                     {station.name}
                   </span>
                   <div className="flex gap-[4px] ml-auto">
@@ -243,13 +243,14 @@ export default function StationPickerPage() {
             <p className="font-semibold text-[12px] leading-[16px] text-text-muted tracking-[0.84px] uppercase pb-[8px]">
               {search ? "Results" : "All stations"}
             </p>
-            {filteredStations.map((station) => (
+            {filteredStations.map((station, i) => (
               <button
                 key={station.id}
                 onClick={() => selectStation(station.name)}
-                className="flex items-center gap-[12px] py-[10px] w-full border-b-[1.119px] border-border-light"
+                className="flex items-center gap-[12px] py-[10px] w-full border-b-[1.119px] border-border-light active:bg-cream-200 transition-colors duration-150"
+                style={i < 15 ? { animation: `fade-in-up 300ms ease-out ${i * 40}ms both` } : undefined}
               >
-                <span className="text-[14px] leading-[20px] text-text-primary">
+                <span className="font-medium text-[14px] leading-[20px] text-text-primary">
                   {station.name}
                 </span>
                 <div className="flex gap-[4px] ml-auto">
@@ -278,7 +279,7 @@ export default function StationPickerPage() {
           >
             <button
               onClick={handleSearch}
-              className="bg-amber-500 rounded-[16px] py-[16px] w-full"
+              className="bg-amber-500 rounded-[16px] py-[16px] w-full active:scale-[0.98] transition-transform duration-150"
             >
               <span className="font-semibold text-[16px] leading-[24px] text-navy-900 text-center">
                 Find routes →

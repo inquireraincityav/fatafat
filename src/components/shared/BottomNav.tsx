@@ -36,7 +36,7 @@ export default function BottomNav() {
           <Link
             key={tab.id}
             href={tab.href}
-            className="flex flex-col gap-[2px] items-center px-[24px] py-[4px] flex-1"
+            className="flex flex-col gap-[2px] items-center px-[24px] py-[4px] flex-1 active:scale-[0.92] transition-transform duration-150"
           >
             <Icon
               className="w-[22px] h-[22px]"

@@ -361,7 +361,7 @@ function JourneyContent() {
       <div className="bg-cream-100 flex flex-col flex-1 min-h-0">
         {/* Header */}
         <div className="flex gap-[12px] items-center pt-[20px] px-[16px] pb-[12px] shrink-0">
-          <button onClick={() => router.back()} className="shrink-0">
+          <button onClick={() => router.back()} className="shrink-0 active:scale-[0.92] transition-transform duration-150">
             <BackArrowIcon />
           </button>
           <div className="flex flex-col min-w-0">
@@ -396,7 +396,7 @@ function JourneyContent() {
             <button
               key={i}
               onClick={() => { setSelectedRoute(i); setExpanded(false); }}
-              className={`flex-1 flex flex-col items-center py-[10px] rounded-[12px] ${
+              className={`flex-1 flex flex-col items-center py-[10px] rounded-[12px] active:scale-[0.97] transition-all duration-150 ${
                 selectedRoute === i
                   ? "bg-navy-900"
                   : "bg-cream-50 border-[1.119px] border-border-light"
@@ -598,7 +598,7 @@ function JourneyContent() {
         <div className="px-[16px] pb-[16px] pt-[8px] border-t-[1.119px] border-border-light bg-cream-100 flex gap-[8px] shrink-0">
           <Link
             href="/tickets"
-            className="bg-amber-500 rounded-[16px] py-[14px] flex-1 flex items-center justify-center"
+            className="bg-amber-500 rounded-[16px] py-[14px] flex-1 flex items-center justify-center active:scale-[0.98] transition-transform duration-150"
           >
             <span className="font-semibold text-[14px] leading-[20px] text-navy-900 text-center">
               Buy ticket
@@ -606,7 +606,7 @@ function JourneyContent() {
           </Link>
           <Link
             href={`/on-board?from=${encodeURIComponent(routeData.fromName)}&to=${encodeURIComponent(routeData.toName)}&speed=${route.speed}`}
-            className="bg-navy-900 rounded-[16px] py-[14px] flex-1 flex items-center justify-center"
+            className="bg-navy-900 rounded-[16px] py-[14px] flex-1 flex items-center justify-center active:scale-[0.98] transition-transform duration-150"
           >
             <span className="font-semibold text-[14px] leading-[20px] text-cream-50 text-center">
               I&apos;m on board
